@@ -49,6 +49,9 @@ web_modules/
 *.tsbuildinfo
 
 # Optional npm cache directory
+
+# Environment variables
+.env
 .npm
 
 # Optional eslint cache
@@ -134,3 +137,5 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+/src/generated/prisma

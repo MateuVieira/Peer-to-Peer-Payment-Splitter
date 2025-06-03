@@ -1,0 +1,6 @@
+node_modules
+dist
+coverage
+.env
+
+# Add any other files or directories you want Prettier to ignore

@@ -1,0 +1,47 @@
+{
+  "name": "peer-to-peer-payment-splitter",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/main.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc && mkdir -p dist/generated && cp -R src/generated/prisma dist/generated/prisma",
+    "start": "node dist/main.js",
+    "lint": "eslint . --ext .ts,.tsx,.js,.jsx,.mjs,.cjs",
+    "lint:fix": "eslint . --ext .ts,.tsx,.js,.jsx,.mjs,.cjs --fix",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md,yml,yaml,html}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md,yml,yaml,html}\"",
+    "dev": "nodemon --watch src --ext ts --exec \"pnpm build && pnpm start\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.11.1",
+  "devDependencies": {
+    "@eslint/js": "^9.28.0",
+    "@types/node": "^22.15.29",
+    "@typescript-eslint/eslint-plugin": "^8.33.1",
+    "@typescript-eslint/parser": "^8.33.1",
+    "eslint": "^9.28.0",
+    "eslint-config-prettier": "^10.1.5",
+    "globals": "^16.2.0",
+    "pino-pretty": "^13.0.0",
+    "prettier": "^3.5.3",
+    "prisma": "^6.9.0",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.33.1"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.9.0",
+    "@types/cors": "^2.8.18",
+    "@types/express": "^5.0.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "helmet": "^8.1.0",
+    "pg": "^8.16.0",
+    "pino": "^9.7.0",
+    "zod": "^3.25.49"
+  }
+}
