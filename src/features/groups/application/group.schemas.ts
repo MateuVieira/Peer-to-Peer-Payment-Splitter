@@ -5,6 +5,9 @@ export const CreateGroupSchema = z.object({
     required_error: 'Group name is required.',
     invalid_type_error: 'Group name must be a string.',
   }).min(1, { message: 'Group name cannot be empty.' }),
+  description: z.string({
+    invalid_type_error: 'Description must be a string.',
+  }).optional(),
   initialMemberIds: z.array(
     z.string({
       invalid_type_error: 'Each member ID in initialMemberIds must be a string.',

@@ -1,10 +1,10 @@
 import { User } from '../../users/domain/user.entity.js';
 
 export interface Group {
-  id: string; // Consider using UUIDs
+  id: string;
   name: string;
-  description?: string; // Optional description
-  members: User[]; // Now an array of User objects
+  description?: string;
+  members: User[];
   createdAt: Date;
   updatedAt: Date;
 }

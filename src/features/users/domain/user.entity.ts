@@ -1,7 +1,7 @@
 export interface User {
-  id: string; // Consider using UUIDs
+  id: string;
   name: string;
-  email: string; // Should be unique
+  email: string;
   createdAt: Date;
   updatedAt: Date;
 }

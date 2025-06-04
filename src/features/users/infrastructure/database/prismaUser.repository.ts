@@ -2,12 +2,9 @@ import { PrismaClient, User as PrismaUser } from '../../../../generated/prisma/i
 import { IUserRepository } from '../../domain/user.repository.js';
 import { User } from '../../domain/user.entity.js';
 
-// Helper function to map PrismaUser to our domain User entity.
-// This is useful if your domain entity structure diverges from the Prisma model.
 function toDomainUser(prismaUser: PrismaUser): User {
   return {
     ...prismaUser,
-    // Prisma typically returns Date objects, but explicit conversion can be a safeguard.
     createdAt: new Date(prismaUser.createdAt),
     updatedAt: new Date(prismaUser.updatedAt),
   };
@@ -39,6 +36,4 @@ export class PrismaUserRepository implements IUserRepository {
     });
     return toDomainUser(prismaUser);
   }
-
-  // TODO: Implement other methods like update, delete, list as needed
 }
