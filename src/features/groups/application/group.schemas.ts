@@ -32,3 +32,14 @@ export const ModifyGroupMemberSchema = z.object({
 
 export type CreateGroupValidationDto = z.infer<typeof CreateGroupSchema>;
 export type ModifyGroupMemberValidationDto = z.infer<typeof ModifyGroupMemberSchema>;
+
+export const UpdateGroupSchema = z.object({
+  name: z.string({
+    invalid_type_error: 'Group name must be a string.',
+  }).min(1, { message: 'Group name cannot be empty.' }).optional(),
+  description: z.string({
+    invalid_type_error: 'Description must be a string.',
+  }).nullable().optional(),
+});
+
+export type UpdateGroupValidationDto = z.infer<typeof UpdateGroupSchema>;

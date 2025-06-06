@@ -1,9 +1,12 @@
 import {
   PrismaClient,
+  Prisma,
   Group as PrismaGroupModel,
   User as PrismaUserModel,
 } from '../../../../generated/prisma/index.js';
-import { IGroupRepository } from '../../domain/group.repository.js';
+import { IGroupRepository, PaginatedGroupsResult, PaginationParams } from '../../domain/group.repository.js';
+import { logger } from '../../../../core/index.js';
+import { PrismaErrorCodes } from '../../../../core/database/prisma.errors.js';
 import { Group } from '../../domain/group.entity.js';
 import { User } from '../../../users/domain/user.entity.js';
 
@@ -79,7 +82,7 @@ export class PrismaGroupRepository implements IGroupRepository {
       });
       return toDomainGroup(updatedPrismaGroup);
     } catch (error) {
-      console.error(`Error adding member ${userId} to group ${groupId}:`, error);
+      logger.error({ err: error, groupId, userId }, `Error adding member ${userId} to group ${groupId}`);
       return null; 
     }
   }
@@ -97,8 +100,74 @@ export class PrismaGroupRepository implements IGroupRepository {
       });
       return toDomainGroup(updatedPrismaGroup);
     } catch (error) {
-      console.error(`Error removing member ${userId} from group ${groupId}:`, error);
+      logger.error({ err: error, groupId, userId }, `Error removing member ${userId} from group ${groupId}`);
       return null;
+    }
+  }
+
+  async update(groupId: string, data: Partial<Omit<Group, 'id' | 'createdAt' | 'updatedAt' | 'members'>>): Promise<Group | null> {
+    try {
+      const updatedPrismaGroup = await this.prisma.group.update({
+        where: { id: groupId },
+        data: {
+          name: data.name,
+          description: data.description,
+        },
+        include: { members: true },
+      });
+      return toDomainGroup(updatedPrismaGroup);
+    } catch (error) {
+      logger.error({ err: error, groupId, data }, `Error updating group ${groupId}`);
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (error.code === PrismaErrorCodes.RECORD_NOT_FOUND) {
+          return null;
+        }
+      }
+      throw error;
+    }
+  }
+
+  async delete(groupId: string): Promise<boolean> {
+    try {
+      await this.prisma.group.delete({
+        where: { id: groupId },
+      });
+      return true;
+    } catch (error) {
+      logger.error({ err: error, groupId }, `Error deleting group ${groupId}`);
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (error.code === PrismaErrorCodes.RECORD_NOT_FOUND) {
+          return false;
+        }
+      }
+      return false; 
+    }
+  }
+
+  async findAll(params: PaginationParams): Promise<PaginatedGroupsResult> {
+    try {
+      const { page, limit } = params;
+      const skip = (page - 1) * limit;
+
+      const [prismaGroups, total] = await this.prisma.$transaction([
+        this.prisma.group.findMany({
+          skip: skip,
+          take: limit,
+          include: { members: true },
+          orderBy: {
+            createdAt: 'desc',
+          },
+        }),
+        this.prisma.group.count(),
+      ]);
+
+      return {
+        groups: prismaGroups.map(toDomainGroup),
+        total,
+      };
+    } catch (error) {
+      logger.error({ err: error }, 'Error fetching all groups');
+      throw error;
     }
   }
 }
