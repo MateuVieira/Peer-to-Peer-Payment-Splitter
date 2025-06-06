@@ -1,6 +1,11 @@
 import { IUserRepository } from '../domain/user.repository.js';
 import { User } from '../domain/user.entity.js';
 import { AppError, HttpCode } from '../../../core/error/app.error.js';
+import { logger } from '../../../core/logger.js';
+
+export interface UpdateUserDto {
+  name?: string;
+}
 
 export interface CreateUserDto {
   name: string;
@@ -43,5 +48,59 @@ export class UserService {
       });
     }
     return user;
+  }
+
+  async updateUser(userId: string, updateData: UpdateUserDto): Promise<User> {
+    const userToUpdate = await this.userRepository.findById(userId);
+    if (!userToUpdate) {
+      throw new AppError({
+        httpCode: HttpCode.NOT_FOUND,
+        description: 'User not found.',
+      });
+    }
+
+    const finalUpdateData: Partial<UpdateUserDto> = {};
+    let hasChanges = false;
+    if (Object.prototype.hasOwnProperty.call(updateData, 'name') && updateData.name !== userToUpdate.name) {
+      finalUpdateData.name = updateData.name;
+      hasChanges = true;
+    }
+
+    if (!hasChanges) {
+      return userToUpdate;
+    }
+
+    const updatedUser = await this.userRepository.update(userId, finalUpdateData);
+    if (!updatedUser) {
+      throw new AppError({
+        httpCode: HttpCode.INTERNAL_SERVER_ERROR,
+        description: 'Failed to update user.',
+      });
+    }
+
+    return updatedUser;
+  }
+
+  async deleteUser(userId: string): Promise<void> {
+    const userToDelete = await this.userRepository.findById(userId);
+    if (!userToDelete) {
+      throw new AppError({
+        httpCode: HttpCode.NOT_FOUND,
+        description: 'User not found. Cannot delete.',
+      });
+    }
+
+    try {
+      await this.userRepository.delete(userId);
+    } catch (error) {
+      const errorMessage = 'Failed to delete user due to an unexpected error.';
+      if (error instanceof Error) {
+        logger.error({ originalError: error, userId }, 'Detailed error during user deletion in service');
+      }
+      throw new AppError({
+        httpCode: HttpCode.INTERNAL_SERVER_ERROR,
+        description: errorMessage,
+      });
+    }
   }
 }

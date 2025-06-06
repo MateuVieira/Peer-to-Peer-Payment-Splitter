@@ -1,4 +1,5 @@
 import { PrismaClient, User as PrismaUser } from '../../../../generated/prisma/index.js';
+import { logger } from '../../../../core/index.js';
 import { IUserRepository } from '../../domain/user.repository.js';
 import { User } from '../../domain/user.entity.js';
 
@@ -35,5 +36,32 @@ export class PrismaUserRepository implements IUserRepository {
       },
     });
     return toDomainUser(prismaUser);
+  }
+
+  async update(userId: string, data: Partial<Omit<User, 'id' | 'createdAt' | 'updatedAt'>>): Promise<User | null> {
+    try {
+      const prismaUser = await this.prisma.user.update({
+        where: { id: userId },
+        data: {
+          name: data.name,
+          updatedAt: new Date(),
+        },
+      });
+      return toDomainUser(prismaUser);
+    } catch (error) {
+      logger.error({ err: error, userId, data }, `Error updating user ${userId}`);
+      return null;
+    }
+  }
+
+  async delete(userId: string): Promise<void> {
+    try {
+      await this.prisma.user.delete({
+        where: { id: userId },
+      });
+    } catch (error) {
+      logger.error({ err: error, userId }, `Error deleting user ${userId}`);
+      throw error; 
+    }
   }
 }

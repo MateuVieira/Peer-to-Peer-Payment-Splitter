@@ -12,3 +12,11 @@ export const CreateUserSchema = z.object({
 });
 
 export type CreateUserValidationDto = z.infer<typeof CreateUserSchema>;
+
+export const UpdateUserSchema = z.object({
+  name: z.string({
+    invalid_type_error: 'Name must be a string.',
+  }).min(1, { message: 'Name cannot be empty.' }).optional(),
+});
+
+export type UpdateUserValidationDto = z.infer<typeof UpdateUserSchema>;
