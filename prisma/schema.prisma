@@ -21,6 +21,14 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   groups    Group[]  @relation("UserGroups") // Defines the many-to-many relation with Group
+
+  // Expenses related
+  paidExpenses          Expense[]            @relation("ExpensePayer")
+  expenseParticipations ExpenseParticipant[]
+
+  // Settlements related
+  madeSettlements     Settlement[] @relation("SettlementPayer")
+  receivedSettlements Settlement[] @relation("SettlementPayee")
 }
 
 model Group {
@@ -30,4 +38,71 @@ model Group {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   members     User[]   @relation("UserGroups") // Defines the many-to-many relation with User
+  expenses    Expense[]
+  settlements Settlement[]
+}
+
+enum SplitType {
+  EQUAL
+  PARTIAL_EQUAL // For cases where only some members participate, or amounts are manually set for each
+}
+
+model Expense {
+  id          String    @id @default(uuid())
+  description String
+  amount      Int // Amount in cents
+  currency    String    @default("USD")
+  expenseDate DateTime
+  splitType   SplitType @default(EQUAL)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  // Relations
+  group   Group  @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  groupId String
+  payer   User   @relation(name: "ExpensePayer", fields: [payerId], references: [id]) // A user who paid for the expense
+  payerId String
+
+  participants ExpenseParticipant[] // Users who are part of this expense split
+
+  @@index([groupId])
+  @@index([payerId])
+}
+
+model ExpenseParticipant {
+  id          String @id @default(uuid())
+  shareAmount Int // Share amount in cents for this participant for this expense
+
+  // Relations
+  expense   Expense @relation(fields: [expenseId], references: [id], onDelete: Cascade)
+  expenseId String
+
+  participant   User   @relation(fields: [participantId], references: [id]) // A user who is a participant in the expense
+  participantId String
+
+  @@unique([expenseId, participantId]) // Ensures a user is only listed once per expense
+  @@index([expenseId])
+  @@index([participantId])
+}
+
+model Settlement {
+  id             String   @id @default(uuid())
+  amount         Int // Amount in cents
+  currency       String   @default("USD")
+  settlementDate DateTime
+  createdAt      DateTime @default(now())
+
+  // Relations
+  group   Group @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  groupId String
+
+  payer   User @relation(name: "SettlementPayer", fields: [payerId], references: [id]) // User who made the payment
+  payerId String
+
+  payee   User @relation(name: "SettlementPayee", fields: [payeeId], references: [id]) // User who received the payment
+  payeeId String
+
+  @@index([groupId])
+  @@index([payerId])
+  @@index([payeeId])
 }

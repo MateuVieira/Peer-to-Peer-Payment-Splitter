@@ -3,9 +3,11 @@ import cors from 'cors';
 import helmet from 'helmet';
 import dotenv from 'dotenv';
 import { AppError, HttpCode } from './core/error/index.js';
-import { logger, userService, groupService } from './core/index.js';
+import { logger, userService, groupService, settlementService, expenseService } from './core/index.js';
 import { createUserRouter } from './features/users/api/index.js';
 import { createGroupRouter } from './features/groups/api/index.js';
+import { createSettlementRouter } from './features/settlements/api/settlement.controller.js';
+import { createExpenseRouter } from './features/expenses/api/expense.controller.js';
 
 dotenv.config();
 
@@ -27,9 +29,13 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 
 const userRouter = createUserRouter(userService);
 const groupRouter = createGroupRouter(groupService);
+const settlementRouter = createSettlementRouter(settlementService);
+const expenseRouter = createExpenseRouter(expenseService);
 
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/groups', groupRouter);
+app.use('/api/v1/settlements', settlementRouter);
+app.use('/api/v1/expenses', expenseRouter);
 
 app.get('/health', (_req: Request, res: Response) => {
   res.status(200).json({ status: 'UP', timestamp: new Date().toISOString() });
@@ -38,7 +44,7 @@ app.get('/health', (_req: Request, res: Response) => {
 app.use((_req: Request, res: Response) => {
   res.status(HttpCode.NOT_FOUND).json({ message: 'Resource not found.' });
 });
-app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
+app.use((err: Error, _req: Request, res: Response) => {
   logger.error(err, 'An unhandled error occurred');
   if (err instanceof AppError) {
     res.status(err.httpCode).json({
