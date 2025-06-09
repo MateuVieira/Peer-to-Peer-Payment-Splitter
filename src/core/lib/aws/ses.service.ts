@@ -1,4 +1,4 @@
-import { SendEmailCommandInput, SESClient } from "@aws-sdk/client-ses";
+import { SendEmailCommandInput } from "@aws-sdk/client-ses";
 import { config } from "../../../config.js";
 import { v4 as uuidv4 } from "uuid";
 
@@ -10,12 +10,12 @@ interface SendEmailParams {
 }
 
 export class SESService {
-  private sesClient: SESClient;
+  // private sesClient: SESClient;
 
   constructor() {
-    this.sesClient = new SESClient({
-      region: config.aws.region,
-    });
+    // this.sesClient = new SESClient({
+    //   region: config.aws.region,
+    // });
   }
 
   async sendEmail(input: SendEmailParams): Promise<string | undefined> {
@@ -56,7 +56,7 @@ export class SESService {
       });
 
       console.log(
-        `Email sent successfully. Message ID: ${response.MessageId}, To: ${params.Destination?.ToAddresses?.[0]}`
+        `Email sent successfully. Message ID: ${response.MessageId}, To: ${params.Destination?.ToAddresses?.[0] || toAddresses}`
       );
       return response.MessageId;
     } catch (error) {
