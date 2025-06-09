@@ -16,9 +16,9 @@ import { createGroupRouter } from "./features/groups/api/index.js";
 import { createSettlementRouter } from "./features/settlements/api/settlement.controller.js";
 import { createExpenseRouter } from "./features/expenses/api/expense.controller.js";
 import { createCsvRouter } from "./features/csv/api/csv.controller.js";
-import "./features/csv/consumer/csv.consumer.js";
-import "./features/expenses/consumer/expense.consumer.js";
-import "./features/notifications/consumer/notification.send.handler.js";
+import { startCentralConsumer } from "./core/events/central.consumer.js";
+
+startCentralConsumer();
 
 dotenv.config();
 
