@@ -20,11 +20,11 @@ export class ExpenseCompletedHandler implements IMessageHandler<ExpenseCompleted
     try {
       await this.expenseService.createMessageOfCreatedExpense(payload);
       logger.info(
-        `${this.prefix} Successfully initiated processing for expenseId: ${payload.expenseId}, eventType: ${this.topic}`
+        `${this.prefix} Successfully sent notification for expenseId: ${payload.expenseId}, eventType: ${this.topic}`
       );
     } catch (error) {
       logger.error(
-        `${this.prefix} Error processing ${this.topic} for expenseId: ${payload.expenseId}, eventType: ${this.topic}:`,
+        `${this.prefix} Error sending notification for expenseId: ${payload.expenseId}, eventType: ${this.topic}:`,
         { error, payload, messageId: originalMessage.MessageId }
       );
 

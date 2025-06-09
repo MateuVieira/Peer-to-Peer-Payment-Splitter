@@ -27,13 +27,13 @@ export class CsvProcessingStartedHandler implements IMessageHandler<CsvProcessin
       const endTime = process.hrtime.bigint();
       const durationMs = Number(endTime - startTime) / 1_000_000;
       logger.info(
-        `${this.prefix} Successfully initiated processing for csvProcessingId: ${payload.jobId}. Duration: ${durationMs.toFixed(2)}ms`
+        `${this.prefix} Successfully sent notification for csvProcessingId: ${payload.jobId}. Duration: ${durationMs.toFixed(2)}ms`
       );
     } catch (error) {
       const endTime = process.hrtime.bigint();
       const durationMs = Number(endTime - startTime) / 1_000_000;
       logger.error(
-        `${this.prefix} Error processing ${this.topic} for csvProcessingId: ${payload.jobId}. Duration: ${durationMs.toFixed(2)}ms:`,
+        `${this.prefix} Error sending notification for csvProcessingId: ${payload.jobId}. Duration: ${durationMs.toFixed(2)}ms:`,
         { error, payload, messageId: originalMessage.MessageId }
       );
 

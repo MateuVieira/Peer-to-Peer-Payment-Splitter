@@ -20,11 +20,11 @@ export class SettlementCompletedHandler implements IMessageHandler<SettlementCom
     try {
       await this.settlementService.createMessageOfCreatedSettlement(payload);
       logger.info(
-        `${this.prefix} Successfully initiated processing for settlementId: ${payload.settlementId}, eventType: ${this.topic}`
+        `${this.prefix} Successfully sent notification for settlementId: ${payload.settlementId}, eventType: ${this.topic}`
       );
     } catch (error) {
       logger.error(
-        `${this.prefix} Error processing ${this.topic} for settlementId: ${payload.settlementId}, eventType: ${this.topic}:`,
+        `${this.prefix} Error sending notification for settlementId: ${payload.settlementId}, eventType: ${this.topic}:`,
         { error, payload, messageId: originalMessage.MessageId }
       );
 
