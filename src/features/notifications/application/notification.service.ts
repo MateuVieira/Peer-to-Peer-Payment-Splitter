@@ -56,11 +56,22 @@ export class NotificationService {
         { error, eventId, eventType, recipientEmail },
         "Failed to record notification log"
       );
+
+      throw error;
     }
   }
 
   public async requestNotification(params: NotificationRequestParams): Promise<void> {
     const { eventId, eventType, recipientEmail, subject, body, htmlBody } = params;
+
+    // Check if recipientEmail is missing or empty
+    if (!recipientEmail) {
+      logger.error(
+        { eventId, eventType, params },
+        "Missing recipient email in notification request"
+      );
+      throw new Error("Missing recipient email in notification request");
+    }
 
     logger.info({ eventId, eventType, recipientEmail }, "Processing notification request");
 
