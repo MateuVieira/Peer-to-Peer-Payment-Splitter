@@ -20,11 +20,11 @@ export class NotificationSendHandler implements IMessageHandler<NotificationSend
     try {
       await this.notificationService.requestNotification(payload);
       logger.info(
-        `${this.prefix} Successfully initiated processing for eventId: ${payload.eventId}, eventType: ${payload.eventType}`
+        `${this.prefix} Successfully sent notification for eventId: ${payload.eventId}, eventType: ${payload.eventType}`
       );
     } catch (error) {
       logger.error(
-        `${this.prefix} Error processing ${this.topic} for eventId: ${payload.eventId}, eventType: ${payload.eventType}:`,
+        `${this.prefix} Error sending notification for eventId: ${payload.eventId}, eventType: ${payload.eventType}:`,
         { error, payload, messageId: originalMessage.MessageId }
       );
 
