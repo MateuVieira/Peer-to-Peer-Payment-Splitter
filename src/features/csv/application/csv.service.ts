@@ -516,7 +516,9 @@ export class CsvService {
       await this.queueProducer.sendMessage(Topic.NOTIFICATION_SEND, {
         eventId: payload.jobId,
         eventType: Topic.NOTIFICATION_SEND,
-        ...notificationDetails,
+        recipientEmail: notificationDetails.email,
+        subject: notificationDetails.subject,
+        body: notificationDetails.body,
       });
 
       logger.info(`Notification sent for completed CSV job: ${payload.jobId}`);

@@ -153,7 +153,9 @@ You have been added to the settlement from ${settlement.payerId} to ${settlement
         await this.producerService.sendMessage(Topic.NOTIFICATION_SEND, {
           eventId: payload.settlementId,
           eventType: Topic.NOTIFICATION_SEND,
-          ...message,
+          recipientEmail: message.email,
+          subject: message.subject,
+          body: message.body,
         });
 
         return { success: true, userId, role };

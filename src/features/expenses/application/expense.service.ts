@@ -209,7 +209,9 @@ export class ExpenseService {
         await this.producerService.sendMessage(Topic.NOTIFICATION_SEND, {
           eventId: payload.expenseId,
           eventType: Topic.NOTIFICATION_SEND,
-          ...message,
+          recipientEmail: message.email,
+          subject: message.subject,
+          body: message.body,
         });
 
         return { success: true, participantId: participant.participantId };
