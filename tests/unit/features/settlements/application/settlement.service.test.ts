@@ -8,6 +8,7 @@ import type { User } from "../../../../../src/features/users/domain/user.entity.
 import type { Group } from "../../../../../src/features/groups/domain/group.entity.js";
 import type { Settlement } from "../../../../../src/features/settlements/domain/settlement.entity.js";
 import { AppError, HttpCode } from "../../../../../src/core/error/app.error.js";
+import { UserService } from "../../../../../src/features/users/application/user.service.js";
 
 // Mock logger
 jest.mock("../../../../../src/core/logger.js", () => ({
@@ -78,8 +79,28 @@ describe("SettlementService - Integration Tests", () => {
       delete: jest.fn(),
       findAll: jest.fn(),
     };
+    
+    // Mock producer service
+    const mockProducerService = {
+      sendMessage: jest.fn().mockResolvedValue(undefined),
+    };
+    
+    // Mock user service
+    const mockUserService = {
+      userRepository: {},
+      getUserById: jest.fn(),
+      getUserByEmail: jest.fn(),
+      createUser: jest.fn(),
+      updateUser: jest.fn(),
+      deleteUser: jest.fn(),
+    } as unknown as UserService;
 
-    settlementService = new SettlementService(mockSettlementRepository, mockGroupRepository);
+    settlementService = new SettlementService(
+      mockSettlementRepository, 
+      mockGroupRepository,
+      mockProducerService,
+      mockUserService
+    );
   });
 
   describe("createSettlement", () => {

@@ -7,6 +7,7 @@ import { SplitType } from '../../../../../src/features/expenses/domain/expense.e
 import type { Expense } from '../../../../../src/features/expenses/domain/expense.entity.js';
 import type { CreateExpenseDto } from '../../../../../src/features/expenses/application/expense.schemas.js';
 import { AppError, HttpCode } from '../../../../../src/core/error/app.error.js';
+import { UserService } from '../../../../../src/features/users/application/user.service.js';
 
 jest.mock('../../../../../src/core/logger.js', () => ({
     logger: {
@@ -38,7 +39,28 @@ describe('ExpenseService - Integration Tests', () => {
       delete: jest.fn(),
       findAll: jest.fn(),
     };
-    expenseService = new ExpenseService(mockExpenseRepository, mockGroupRepository);
+    
+    // Mock producer service
+    const mockProducerService = {
+      sendMessage: jest.fn().mockResolvedValue(undefined),
+    };
+    
+    // Mock user service
+    const mockUserService = {
+      userRepository: {},
+      getUserById: jest.fn(),
+      getUserByEmail: jest.fn(),
+      createUser: jest.fn(),
+      updateUser: jest.fn(),
+      deleteUser: jest.fn(),
+    } as unknown as UserService;
+    
+    expenseService = new ExpenseService(
+      mockExpenseRepository, 
+      mockGroupRepository, 
+      mockProducerService, 
+      mockUserService
+    );
   });
 
   describe('createExpense', () => {
