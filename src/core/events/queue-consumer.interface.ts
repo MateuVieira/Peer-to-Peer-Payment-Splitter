@@ -1,4 +1,4 @@
-import type { IMessageHandler, EventPayload } from './message-handler.interface.js';
+import type { IMessageHandler, EventPayload } from "./message-handler.interface.js";
 
 /**
  * Interface for a queue consumer service.

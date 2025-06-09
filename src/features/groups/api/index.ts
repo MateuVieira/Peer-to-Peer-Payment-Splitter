@@ -1,1 +1,1 @@
-export * from './group.controller.js';
+export * from "./group.controller.js";

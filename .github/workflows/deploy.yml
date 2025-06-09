@@ -5,14 +5,14 @@ on:
     branches:
       - main
     paths:
-      - 'src/**'
-      - 'prisma/**'
-      - 'Dockerfile'
-      - '.dockerignore'
-      - 'package.json'
-      - 'pnpm-lock.yaml'
-      - '.github/workflows/deploy.yml'
-      - 'task-definition.json'
+      - "src/**"
+      - "prisma/**"
+      - "Dockerfile"
+      - ".dockerignore"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - ".github/workflows/deploy.yml"
+      - "task-definition.json"
 
 permissions:
   id-token: write
@@ -30,7 +30,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: "18"
 
       - name: Install pnpm
         uses: pnpm/action-setup@v2

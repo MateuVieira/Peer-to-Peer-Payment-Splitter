@@ -1,4 +1,4 @@
-import { app, logger } from './app.js';
+import { app, logger } from "./app.js";
 
 const PORT = process.env.PORT ?? 3001;
 
@@ -10,7 +10,7 @@ const startServer = () => {
       logger.info(`Health check available at http://localhost:${PORT}/health`);
     });
   } catch (error) {
-    logger.fatal(error, 'Failed to start server');
+    logger.fatal(error, "Failed to start server");
     process.exit(1);
   }
 };

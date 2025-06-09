@@ -1,10 +1,10 @@
 // src/core/lib/aws/sqs.producer.service.ts
-import { SQSClient, SendMessageCommand, type MessageAttributeValue } from '@aws-sdk/client-sqs';
-import { IQueueProducer } from '../../events/event-producer.interface.js';
-import { AppError, HttpCode } from '../../error/app.error.js';
-import { logger } from '../../logger.js';
-import { Topic } from '../../events/topics.js';
-import { config } from '../../../config.js';
+import { SQSClient, SendMessageCommand, type MessageAttributeValue } from "@aws-sdk/client-sqs";
+import { IQueueProducer } from "../../events/event-producer.interface.js";
+import { AppError, HttpCode } from "../../error/app.error.js";
+import { logger } from "../../logger.js";
+import { Topic } from "../../events/topics.js";
+import { config } from "../../../config.js";
 
 export class SqsProducerService implements IQueueProducer {
   private sqsClient: SQSClient;
@@ -14,7 +14,9 @@ export class SqsProducerService implements IQueueProducer {
     const region = config.aws.region;
     this.sqsClient = new SQSClient({ region });
     this.defaultQueueUrl = config.aws.sqsQueueUrl;
-    logger.info(`SqsProducerService initialized with region: ${region} and default queue URL: ${this.defaultQueueUrl || 'not set'}`);
+    logger.info(
+      `SqsProducerService initialized with region: ${region} and default queue URL: ${this.defaultQueueUrl || "not set"}`
+    );
   }
 
   async sendMessage<T>(
@@ -48,7 +50,7 @@ export class SqsProducerService implements IQueueProducer {
 
       const finalMessageAttributes: Record<string, MessageAttributeValue> = {
         ...transformedAttributes,
-        topic: { DataType: 'String', StringValue: topic.toString() },
+        topic: { DataType: "String", StringValue: topic.toString() },
       };
 
       const command = new SendMessageCommand({
@@ -58,11 +60,13 @@ export class SqsProducerService implements IQueueProducer {
       });
 
       const result = await this.sqsClient.send(command);
-      logger.info(`Message sent to SQS queue ${queueUrl} (topic: ${topic}) with ID: ${result.MessageId}`);
+      logger.info(
+        `Message sent to SQS queue ${queueUrl} (topic: ${topic}) with ID: ${result.MessageId}`
+      );
       return result.MessageId;
     } catch (error) {
       logger.error(`Error sending message to SQS queue ${queueUrl} (topic: ${topic}):`, error);
-      
+
       if (error instanceof Error) {
         throw new AppError({
           httpCode: HttpCode.INTERNAL_SERVER_ERROR,
@@ -78,11 +82,11 @@ export class SqsProducerService implements IQueueProducer {
   }
 
   private convertTopicToEnvVarName(topic: string): string {
-    return `SQS_QUEUE_URL_${topic.toUpperCase().replace(/\./g, '_')}`;
+    return `SQS_QUEUE_URL_${topic.toUpperCase().replace(/\./g, "_")}`;
   }
 
   private resolveQueueUrl(topic: string): string | undefined {
-    if (topic.startsWith('http://') || topic.startsWith('https://')) {
+    if (topic.startsWith("http://") || topic.startsWith("https://")) {
       logger.debug(`Identifier '${topic}' is a direct URL.`);
       return topic;
     }
@@ -91,16 +95,22 @@ export class SqsProducerService implements IQueueProducer {
     const specificQueueUrl = process.env[envVarName];
 
     if (specificQueueUrl) {
-      logger.debug(`Resolved topic '${topic}' to SQS queue URL '${specificQueueUrl}' from env var '${envVarName}'.`);
+      logger.debug(
+        `Resolved topic '${topic}' to SQS queue URL '${specificQueueUrl}' from env var '${envVarName}'.`
+      );
       return specificQueueUrl;
     }
 
     if (this.defaultQueueUrl) {
-      logger.warn(`No specific SQS queue URL found for topic '${topic}' (checked env var '${envVarName}'). Falling back to default SQS queue URL: ${this.defaultQueueUrl}`);
+      logger.warn(
+        `No specific SQS queue URL found for topic '${topic}' (checked env var '${envVarName}'). Falling back to default SQS queue URL: ${this.defaultQueueUrl}`
+      );
       return this.defaultQueueUrl;
     }
-    
-    logger.error(`No SQS queue URL could be resolved for topic/identifier '${topic}'. Neither specific env var '${envVarName}' nor a default SQS queue URL is configured.`);
+
+    logger.error(
+      `No SQS queue URL could be resolved for topic/identifier '${topic}'. Neither specific env var '${envVarName}' nor a default SQS queue URL is configured.`
+    );
     return undefined;
   }
 }

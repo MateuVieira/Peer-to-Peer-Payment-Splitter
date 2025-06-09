@@ -1,7 +1,7 @@
-import { IUserRepository } from '../domain/user.repository.js';
-import { User } from '../domain/user.entity.js';
-import { AppError, HttpCode } from '../../../core/error/app.error.js';
-import { logger } from '../../../core/logger.js';
+import { IUserRepository } from "../domain/user.repository.js";
+import { User } from "../domain/user.entity.js";
+import { AppError, HttpCode } from "../../../core/error/app.error.js";
+import { logger } from "../../../core/logger.js";
 
 export interface UpdateUserDto {
   name?: string;
@@ -20,7 +20,7 @@ export class UserService {
     if (existingUser) {
       throw new AppError({
         httpCode: HttpCode.CONFLICT,
-        description: 'User with this email already exists.',
+        description: "User with this email already exists.",
       });
     }
 
@@ -33,7 +33,7 @@ export class UserService {
     if (!user) {
       throw new AppError({
         httpCode: HttpCode.NOT_FOUND,
-        description: 'User not found.',
+        description: "User not found.",
       });
     }
     return user;
@@ -44,7 +44,7 @@ export class UserService {
     if (!user) {
       throw new AppError({
         httpCode: HttpCode.NOT_FOUND,
-        description: 'User not found.',
+        description: "User not found.",
       });
     }
     return user;
@@ -55,13 +55,16 @@ export class UserService {
     if (!userToUpdate) {
       throw new AppError({
         httpCode: HttpCode.NOT_FOUND,
-        description: 'User not found.',
+        description: "User not found.",
       });
     }
 
     const finalUpdateData: Partial<UpdateUserDto> = {};
     let hasChanges = false;
-    if (Object.prototype.hasOwnProperty.call(updateData, 'name') && updateData.name !== userToUpdate.name) {
+    if (
+      Object.prototype.hasOwnProperty.call(updateData, "name") &&
+      updateData.name !== userToUpdate.name
+    ) {
       finalUpdateData.name = updateData.name;
       hasChanges = true;
     }
@@ -74,7 +77,7 @@ export class UserService {
     if (!updatedUser) {
       throw new AppError({
         httpCode: HttpCode.INTERNAL_SERVER_ERROR,
-        description: 'Failed to update user.',
+        description: "Failed to update user.",
       });
     }
 
@@ -86,16 +89,19 @@ export class UserService {
     if (!userToDelete) {
       throw new AppError({
         httpCode: HttpCode.NOT_FOUND,
-        description: 'User not found. Cannot delete.',
+        description: "User not found. Cannot delete.",
       });
     }
 
     try {
       await this.userRepository.delete(userId);
     } catch (error) {
-      const errorMessage = 'Failed to delete user due to an unexpected error.';
+      const errorMessage = "Failed to delete user due to an unexpected error.";
       if (error instanceof Error) {
-        logger.error({ originalError: error, userId }, 'Detailed error during user deletion in service');
+        logger.error(
+          { originalError: error, userId },
+          "Detailed error during user deletion in service"
+        );
       }
       throw new AppError({
         httpCode: HttpCode.INTERNAL_SERVER_ERROR,

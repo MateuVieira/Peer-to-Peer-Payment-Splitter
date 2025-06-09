@@ -1,4 +1,4 @@
-import type { Expense, SplitType } from './expense.entity.js';
+import type { Expense, SplitType } from "./expense.entity.js";
 
 export interface CreateExpenseData {
   description: string;

@@ -1,6 +1,6 @@
-import type { Message as SQSMessage } from '@aws-sdk/client-sqs';
-import type { ZodSchema } from 'zod';
-import type { Topic } from './topics.js';
+import type { Message as SQSMessage } from "@aws-sdk/client-sqs";
+import type { ZodSchema } from "zod";
+import type { Topic } from "./topics.js";
 
 /**
  * Defines the structure for an event's data payload.

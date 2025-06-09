@@ -79,12 +79,12 @@ describe("SettlementService - Integration Tests", () => {
       delete: jest.fn(),
       findAll: jest.fn(),
     };
-    
+
     // Mock producer service
     const mockProducerService = {
       sendMessage: jest.fn().mockResolvedValue(undefined),
     };
-    
+
     // Mock user service
     const mockUserService = {
       userRepository: {},
@@ -96,7 +96,7 @@ describe("SettlementService - Integration Tests", () => {
     } as unknown as UserService;
 
     settlementService = new SettlementService(
-      mockSettlementRepository, 
+      mockSettlementRepository,
       mockGroupRepository,
       mockProducerService,
       mockUserService

@@ -5,12 +5,12 @@ import { CsvHeaders } from "./csv.entity.js";
  * These should correspond to specific actions to be taken in the system.
  */
 export enum CsvCommandType {
-  CREATE_USER = 'CREATE_USER',
-  ADD_USER_TO_GROUP = 'ADD_USER_TO_GROUP',
-  REMOVE_USER_FROM_GROUP = 'REMOVE_USER_FROM_GROUP',
-  CREATE_GROUP = 'CREATE_GROUP',
-  CREATE_EXPENSE = 'CREATE_EXPENSE',
-  CREATE_SETTLEMENT = 'CREATE_SETTLEMENT',
+  CREATE_USER = "CREATE_USER",
+  ADD_USER_TO_GROUP = "ADD_USER_TO_GROUP",
+  REMOVE_USER_FROM_GROUP = "REMOVE_USER_FROM_GROUP",
+  CREATE_GROUP = "CREATE_GROUP",
+  CREATE_EXPENSE = "CREATE_EXPENSE",
+  CREATE_SETTLEMENT = "CREATE_SETTLEMENT",
 }
 
 export type CSVRecord = Record<CsvHeaders, string>;

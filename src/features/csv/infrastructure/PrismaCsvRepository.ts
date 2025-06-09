@@ -1,7 +1,7 @@
-import { PrismaClient, Prisma, $Enums } from '../../../generated/prisma/index.js';
-import { CsvProcessingJob, CsvCommandResult, CsvJobStatus } from '../domain/csv.entity.js';
-import { ICsvRepository } from '../domain/csv.repository.js';
-import { logger } from '../../../core/logger.js';
+import { PrismaClient, Prisma, $Enums } from "../../../generated/prisma/index.js";
+import { CsvProcessingJob, CsvCommandResult, CsvJobStatus } from "../domain/csv.entity.js";
+import { ICsvRepository } from "../domain/csv.repository.js";
+import { logger } from "../../../core/logger.js";
 
 type PrismaJobWithResults = Prisma.CsvProcessingJobGetPayload<{
   include: { commandResults: true };
@@ -17,11 +17,17 @@ export class PrismaCsvRepository implements ICsvRepository {
     return {
       ...rest,
       createdBy: createdById,
-      commandResults: commandResults ? commandResults.map((cr: PrismaCommandResult) => ({ ...cr } as CsvCommandResult)) : [],
+      commandResults: commandResults
+        ? commandResults.map((cr: PrismaCommandResult) => ({ ...cr }) as CsvCommandResult)
+        : [],
     } as CsvProcessingJob;
   }
 
-  async createJob(jobData: Omit<CsvProcessingJob,  'createdAt' | 'updatedAt' | 'status' | 'commandResults'> & { status?: CsvJobStatus }): Promise<CsvProcessingJob> {
+  async createJob(
+    jobData: Omit<CsvProcessingJob, "createdAt" | "updatedAt" | "status" | "commandResults"> & {
+      status?: CsvJobStatus;
+    }
+  ): Promise<CsvProcessingJob> {
     try {
       const job = await this.prisma.csvProcessingJob.create({
         data: {
@@ -39,20 +45,20 @@ export class PrismaCsvRepository implements ICsvRepository {
           ...(jobData.completedAt && { completedAt: jobData.completedAt }),
         },
       });
-      
+
       const createdJobWithResults = await this.prisma.csvProcessingJob.findUnique({
         where: { id: job.id },
         include: { commandResults: true },
       });
-      
+
       if (!createdJobWithResults) {
         logger.error(`Failed to fetch job ${job.id} with results after creation.`);
-        
+
         throw new Error(`Failed to fetch job ${job.id} with results after creation.`);
       }
       return this._toDomainJob(createdJobWithResults);
     } catch (error) {
-      logger.error('Error creating CSV processing job:', { error, jobData });
+      logger.error("Error creating CSV processing job:", { error, jobData });
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         // Handle known Prisma errors (e.g., unique constraint violation)
       }
@@ -73,21 +79,26 @@ export class PrismaCsvRepository implements ICsvRepository {
     const jobs = await this.prisma.csvProcessingJob.findMany({
       where: { createdById: userId },
       include: { commandResults: true },
-      orderBy: { createdAt: 'desc' },
+      orderBy: { createdAt: "desc" },
     });
-    return jobs.map(job => this._toDomainJob(job));
+    return jobs.map((job) => this._toDomainJob(job));
   }
 
-  async updateJob(id: string, data: Partial<Omit<CsvProcessingJob, 'id' | 'createdAt'>>): Promise<CsvProcessingJob> {
+  async updateJob(
+    id: string,
+    data: Partial<Omit<CsvProcessingJob, "id" | "createdAt">>
+  ): Promise<CsvProcessingJob> {
     const job = await this.prisma.csvProcessingJob.update({
       where: { id },
       data: (() => {
         const { createdBy: createdByUserId, ...restOfData } = data;
-        const prismaDataUpdate: Prisma.CsvProcessingJobUpdateInput = { ...restOfData } as Prisma.CsvProcessingJobUpdateInput;
+        const prismaDataUpdate: Prisma.CsvProcessingJobUpdateInput = {
+          ...restOfData,
+        } as Prisma.CsvProcessingJobUpdateInput;
 
         if (createdByUserId) {
-          prismaDataUpdate.createdBy = { 
-            connect: { id: createdByUserId }
+          prismaDataUpdate.createdBy = {
+            connect: { id: createdByUserId },
           };
         }
         return prismaDataUpdate;
@@ -97,12 +108,12 @@ export class PrismaCsvRepository implements ICsvRepository {
     return this._toDomainJob(job);
   }
 
-  async saveCommandResult(resultData: Omit<CsvCommandResult, 'id'>): Promise<CsvCommandResult> {
+  async saveCommandResult(resultData: Omit<CsvCommandResult, "id">): Promise<CsvCommandResult> {
     const { jobId, ...restOfResultData } = resultData;
     const result = await this.prisma.csvCommandResult.create({
       data: {
         ...restOfResultData,
-        job: { 
+        job: {
           connect: { id: jobId },
         },
       },
@@ -113,8 +124,8 @@ export class PrismaCsvRepository implements ICsvRepository {
   async findCommandResultsByJobId(jobId: string): Promise<CsvCommandResult[]> {
     const results = await this.prisma.csvCommandResult.findMany({
       where: { jobId },
-      orderBy: { lineNumber: 'asc' },
+      orderBy: { lineNumber: "asc" },
     });
-    return results.map(r => r as CsvCommandResult);
+    return results.map((r) => r as CsvCommandResult);
   }
 }

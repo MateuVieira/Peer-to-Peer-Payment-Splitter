@@ -1,11 +1,11 @@
-import { PrismaClient, Prisma } from '../../../../generated/prisma/index.js';
-import type { Expense, ExpenseParticipant } from '../../domain/expense.entity.js';
-import type { IExpenseRepository, CreateExpenseData } from '../../domain/expense.repository.js';
-import { AppError, HttpCode } from '../../../../core/error/app.error.js';
-import { PrismaErrorCodes } from '../../../../core/database/prisma.errors.js';
-import { SplitType as DomainSplitType } from '../../domain/expense.entity.js';
-import type { User } from '../../../users/domain/user.entity.js';
-import { mapAuditableEntity } from '../../../../core/database/prisma.mappers.js';
+import { PrismaClient, Prisma } from "../../../../generated/prisma/index.js";
+import type { Expense, ExpenseParticipant } from "../../domain/expense.entity.js";
+import type { IExpenseRepository, CreateExpenseData } from "../../domain/expense.repository.js";
+import { AppError, HttpCode } from "../../../../core/error/app.error.js";
+import { PrismaErrorCodes } from "../../../../core/database/prisma.errors.js";
+import { SplitType as DomainSplitType } from "../../domain/expense.entity.js";
+import type { User } from "../../../users/domain/user.entity.js";
+import { mapAuditableEntity } from "../../../../core/database/prisma.mappers.js";
 
 type PrismaExpenseWithDetails = Prisma.ExpenseGetPayload<{
   include: {
@@ -23,7 +23,7 @@ export class PrismaExpenseRepository implements IExpenseRepository {
 
     // Assuming amounts in CreateExpenseData are already in cents as per interface definition
     const amountInCents = Math.round(expenseData.amount);
-    const participantsInCents = participants.map(p => ({
+    const participantsInCents = participants.map((p) => ({
       participantId: p.participantId,
       shareAmount: Math.round(p.shareAmount),
     }));
@@ -46,13 +46,16 @@ export class PrismaExpenseRepository implements IExpenseRepository {
 
       return this.mapPrismaExpenseToDomain(createdExpense);
     } catch (e) {
-      let errorMessage = 'An unknown error occurred';
+      let errorMessage = "An unknown error occurred";
       if (e instanceof Error) {
         errorMessage = e.message;
       }
 
       if (e instanceof Prisma.PrismaClientKnownRequestError) {
-        if (e.code === PrismaErrorCodes.FOREIGN_KEY_CONSTRAINT_FAILED || e.code === PrismaErrorCodes.RECORD_NOT_FOUND) {
+        if (
+          e.code === PrismaErrorCodes.FOREIGN_KEY_CONSTRAINT_FAILED ||
+          e.code === PrismaErrorCodes.RECORD_NOT_FOUND
+        ) {
           throw new AppError({
             httpCode: HttpCode.BAD_REQUEST,
             description: `Failed to create expense: Invalid group, payer, or participant ID. Details: ${errorMessage}`,
@@ -92,11 +95,11 @@ export class PrismaExpenseRepository implements IExpenseRepository {
         payer: true,
       },
       orderBy: {
-        expenseDate: 'desc',
+        expenseDate: "desc",
       },
     });
 
-    return expenses.map(expense => this.mapPrismaExpenseToDomain(expense));
+    return expenses.map((expense) => this.mapPrismaExpenseToDomain(expense));
   }
 
   private mapPrismaExpenseToDomain(prismaExpense: PrismaExpenseWithDetails): Expense {
@@ -108,7 +111,7 @@ export class PrismaExpenseRepository implements IExpenseRepository {
       updatedAt: new Date(prismaExpense.updatedAt),
       group: mapAuditableEntity(prismaExpense.group),
       payer: mapAuditableEntity(prismaExpense.payer),
-      participants: prismaExpense.participants.map(p => {
+      participants: prismaExpense.participants.map((p) => {
         const domainParticipant: ExpenseParticipant = {
           ...p,
           participant: mapAuditableEntity(p.participant) as Partial<User> | undefined,
@@ -117,7 +120,7 @@ export class PrismaExpenseRepository implements IExpenseRepository {
         return domainParticipant;
       }),
     };
-    
+
     return domainExpense;
   }
 }

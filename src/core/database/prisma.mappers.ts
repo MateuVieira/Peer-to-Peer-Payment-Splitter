@@ -4,9 +4,13 @@
  * @param entity The Prisma entity (e.g., User, Group) or null/undefined.
  * @returns The mapped entity with Date objects for createdAt/updatedAt, or undefined.
  */
-export function mapAuditableEntity<T extends { createdAt: Date | string; updatedAt: Date | string } | null | undefined>(
-  entity: T,
-): (Omit<NonNullable<T>, 'createdAt' | 'updatedAt'> & { createdAt: Date; updatedAt: Date }) | undefined {
+export function mapAuditableEntity<
+  T extends { createdAt: Date | string; updatedAt: Date | string } | null | undefined,
+>(
+  entity: T
+):
+  | (Omit<NonNullable<T>, "createdAt" | "updatedAt"> & { createdAt: Date; updatedAt: Date })
+  | undefined {
   if (!entity) {
     return undefined;
   }

@@ -27,7 +27,7 @@ export class AppError extends Error {
 
     Object.setPrototypeOf(this, new.target.prototype); // Restore prototype chain
 
-    this.name = args.name ?? 'Error';
+    this.name = args.name ?? "Error";
     this.httpCode = args.httpCode;
 
     if (args.isOperational !== undefined) {

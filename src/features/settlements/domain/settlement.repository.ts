@@ -1,4 +1,4 @@
-import type { Settlement } from './settlement.entity.js';
+import type { Settlement } from "./settlement.entity.js";
 
 export interface CreateSettlementData {
   amount: number; // in cents

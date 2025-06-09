@@ -1,1 +1,1 @@
-export * from './prismaSettlement.repository.js';
+export * from "./prismaSettlement.repository.js";

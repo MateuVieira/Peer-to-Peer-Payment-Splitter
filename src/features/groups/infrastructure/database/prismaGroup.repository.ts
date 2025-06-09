@@ -3,12 +3,16 @@ import {
   Prisma,
   Group as PrismaGroupModel,
   User as PrismaUserModel,
-} from '../../../../generated/prisma/index.js';
-import { IGroupRepository, PaginatedGroupsResult, PaginationParams } from '../../domain/group.repository.js';
-import { logger } from '../../../../core/index.js';
-import { PrismaErrorCodes } from '../../../../core/database/prisma.errors.js';
-import { Group } from '../../domain/group.entity.js';
-import { User } from '../../../users/domain/user.entity.js';
+} from "../../../../generated/prisma/index.js";
+import {
+  IGroupRepository,
+  PaginatedGroupsResult,
+  PaginationParams,
+} from "../../domain/group.repository.js";
+import { logger } from "../../../../core/index.js";
+import { PrismaErrorCodes } from "../../../../core/database/prisma.errors.js";
+import { Group } from "../../domain/group.entity.js";
+import { User } from "../../../users/domain/user.entity.js";
 
 function toDomainUser(prismaUser: PrismaUserModel): User {
   return {
@@ -20,9 +24,7 @@ function toDomainUser(prismaUser: PrismaUserModel): User {
   };
 }
 
-function toDomainGroup(
-  prismaGroup: PrismaGroupModel & { members: PrismaUserModel[] },
-): Group {
+function toDomainGroup(prismaGroup: PrismaGroupModel & { members: PrismaUserModel[] }): Group {
   return {
     id: prismaGroup.id,
     name: prismaGroup.name,
@@ -53,8 +55,8 @@ export class PrismaGroupRepository implements IGroupRepository {
   }
 
   async create(
-    data: Omit<Group, 'id' | 'createdAt' | 'updatedAt' | 'members'>,
-    initialMemberIds: string[],
+    data: Omit<Group, "id" | "createdAt" | "updatedAt" | "members">,
+    initialMemberIds: string[]
   ): Promise<Group> {
     const prismaGroup = await this.prisma.group.create({
       data: {
@@ -82,8 +84,11 @@ export class PrismaGroupRepository implements IGroupRepository {
       });
       return toDomainGroup(updatedPrismaGroup);
     } catch (error) {
-      logger.error({ err: error, groupId, userId }, `Error adding member ${userId} to group ${groupId}`);
-      return null; 
+      logger.error(
+        { err: error, groupId, userId },
+        `Error adding member ${userId} to group ${groupId}`
+      );
+      return null;
     }
   }
 
@@ -100,12 +105,18 @@ export class PrismaGroupRepository implements IGroupRepository {
       });
       return toDomainGroup(updatedPrismaGroup);
     } catch (error) {
-      logger.error({ err: error, groupId, userId }, `Error removing member ${userId} from group ${groupId}`);
+      logger.error(
+        { err: error, groupId, userId },
+        `Error removing member ${userId} from group ${groupId}`
+      );
       return null;
     }
   }
 
-  async update(groupId: string, data: Partial<Omit<Group, 'id' | 'createdAt' | 'updatedAt' | 'members'>>): Promise<Group | null> {
+  async update(
+    groupId: string,
+    data: Partial<Omit<Group, "id" | "createdAt" | "updatedAt" | "members">>
+  ): Promise<Group | null> {
     try {
       const updatedPrismaGroup = await this.prisma.group.update({
         where: { id: groupId },
@@ -140,7 +151,7 @@ export class PrismaGroupRepository implements IGroupRepository {
           return false;
         }
       }
-      return false; 
+      return false;
     }
   }
 
@@ -155,7 +166,7 @@ export class PrismaGroupRepository implements IGroupRepository {
           take: limit,
           include: { members: true },
           orderBy: {
-            createdAt: 'desc',
+            createdAt: "desc",
           },
         }),
         this.prisma.group.count(),
@@ -166,7 +177,7 @@ export class PrismaGroupRepository implements IGroupRepository {
         total,
       };
     } catch (error) {
-      logger.error({ err: error }, 'Error fetching all groups');
+      logger.error({ err: error }, "Error fetching all groups");
       throw error;
     }
   }

@@ -7,7 +7,8 @@ export class PartialEqualSplitStrategy implements ISplitStrategy {
     if (!context.involvedParticipantIds || context.involvedParticipantIds.length === 0) {
       throw new AppError({
         httpCode: HttpCode.BAD_REQUEST,
-        description: 'Involved participant IDs are required and cannot be empty for PARTIAL_EQUAL split.',
+        description:
+          "Involved participant IDs are required and cannot be empty for PARTIAL_EQUAL split.",
       });
     }
 

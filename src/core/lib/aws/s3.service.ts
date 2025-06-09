@@ -1,9 +1,15 @@
 // src/core/lib/aws/s3.service.ts
-import { S3Client, PutObjectCommand, GetObjectCommand, DeleteObjectCommand, GetObjectCommandOutput } from '@aws-sdk/client-s3';
-import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
-import { config } from '../../../config.js';
-import { AppError, HttpCode } from '../../error/app.error.js';
-import { Readable } from 'stream';
+import {
+  S3Client,
+  PutObjectCommand,
+  GetObjectCommand,
+  DeleteObjectCommand,
+  GetObjectCommandOutput,
+} from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import { config } from "../../../config.js";
+import { AppError, HttpCode } from "../../error/app.error.js";
+import { Readable } from "stream";
 
 export class S3Service {
   private s3Client: S3Client;
@@ -14,8 +20,8 @@ export class S3Service {
       region: config.aws.region,
       credentials: {
         accessKeyId: config.aws.accessKeyId,
-        secretAccessKey: config.aws.secretAccessKey
-      }
+        secretAccessKey: config.aws.secretAccessKey,
+      },
     });
     this.bucketName = config.aws.s3BucketName;
   }
@@ -24,28 +30,30 @@ export class S3Service {
    * Retrieves a file from S3 as a Node.js Readable stream.
    * Ideal for large files that should be processed in chunks.
    * The caller is responsible for handling the stream (e.g., processing chunks, error handling on the stream).
-   * 
+   *
    * @param key The key of the S3 object.
    * @returns A Promise that resolves to a Readable stream of the S3 object's body.
    */
   async getFile(key: string): Promise<Readable> {
     const command = new GetObjectCommand({
       Bucket: this.bucketName,
-      Key: key
+      Key: key,
     });
 
     try {
       const response: GetObjectCommandOutput = await this.s3Client.send(command);
-      
+
       if (!response.Body) {
         throw new AppError({
           httpCode: HttpCode.NOT_FOUND,
-          description: `S3 Body not found for key: ${key}`
+          description: `S3 Body not found for key: ${key}`,
         });
       }
 
       if (!(response.Body instanceof Readable)) {
-        console.error(`S3Service Error - getFile for key ${key}: response.Body is not a Readable stream.`);
+        console.error(
+          `S3Service Error - getFile for key ${key}: response.Body is not a Readable stream.`
+        );
 
         throw new AppError({
           httpCode: HttpCode.INTERNAL_SERVER_ERROR,
@@ -53,20 +61,23 @@ export class S3Service {
           isOperational: false,
         });
       }
-      
+
       return response.Body;
     } catch (error) {
       console.error(`S3Service Error - getFile for key ${key}:`, error);
       if (error instanceof AppError) throw error;
-      
-      if (error instanceof Error && error.name === 'NoSuchKey') {
-         throw new AppError({ httpCode: HttpCode.NOT_FOUND, description: `File not found in S3: ${key}` });
+
+      if (error instanceof Error && error.name === "NoSuchKey") {
+        throw new AppError({
+          httpCode: HttpCode.NOT_FOUND,
+          description: `File not found in S3: ${key}`,
+        });
       }
-      
+
       throw new AppError({
         httpCode: HttpCode.INTERNAL_SERVER_ERROR,
         description: `Failed to get file from S3: ${key}`,
-        isOperational: false
+        isOperational: false,
       });
     }
   }
@@ -75,7 +86,7 @@ export class S3Service {
     const command = new PutObjectCommand({
       Bucket: this.bucketName,
       Key: key,
-      ContentType: contentType
+      ContentType: contentType,
     });
 
     try {
@@ -85,7 +96,7 @@ export class S3Service {
       throw new AppError({
         httpCode: HttpCode.INTERNAL_SERVER_ERROR,
         description: `Failed to generate presigned URL for S3: ${key}`,
-        isOperational: false
+        isOperational: false,
       });
     }
   }
@@ -93,7 +104,7 @@ export class S3Service {
   async deleteFile(key: string): Promise<void> {
     const command = new DeleteObjectCommand({
       Bucket: this.bucketName,
-      Key: key
+      Key: key,
     });
 
     try {
@@ -103,7 +114,7 @@ export class S3Service {
       throw new AppError({
         httpCode: HttpCode.INTERNAL_SERVER_ERROR,
         description: `Failed to delete file from S3: ${key}`,
-        isOperational: false
+        isOperational: false,
       });
     }
   }

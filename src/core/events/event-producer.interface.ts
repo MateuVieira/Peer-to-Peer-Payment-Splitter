@@ -1,5 +1,5 @@
 // src/core/events/event-producer.interface.ts
-import { Topic } from './topics.js';
+import { Topic } from "./topics.js";
 
 /**
  * Interface for a generic queue producer service.
