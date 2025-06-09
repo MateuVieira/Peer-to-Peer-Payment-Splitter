@@ -32,8 +32,3 @@ export const GetExpensesByGroupIdParamsSchema = z.object({
 
 export type GetExpensesByGroupIdParamsDto = z.infer<typeof GetExpensesByGroupIdParamsSchema>;
 
-export const ExpenseRequestingUserQuerySchema = z.object({
-  requestingUserId: z.string().uuid({ message: 'Requesting User ID must be a valid UUID.' }),
-});
-
-export type ExpenseRequestingUserQueryDto = z.infer<typeof ExpenseRequestingUserQuerySchema>;

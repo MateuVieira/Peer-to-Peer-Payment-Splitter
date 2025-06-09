@@ -1,6 +1,6 @@
 import { Router, type Request, type Response, type NextFunction } from 'express';
 import type { ExpenseService } from '../application/expense.service.js';
-import { validateRequest, validateParams, validateQuery } from '../../../core/middleware/validation.middleware.js';
+import { validateRequest, validateParams } from '../../../core/middleware/validation.middleware.js';
 import {
   CreateExpenseSchema,
   type CreateExpenseDto,
@@ -8,8 +8,6 @@ import {
   type GetExpenseByIdParamsDto,
   GetExpensesByGroupIdParamsSchema,
   type GetExpensesByGroupIdParamsDto,
-  ExpenseRequestingUserQuerySchema,
-  type ExpenseRequestingUserQueryDto,
 } from '../application/expense.schemas.js';
 import { HttpCode } from '../../../core/error/app.error.js';
 
@@ -21,7 +19,7 @@ export const createExpenseRouter = (expenseService: ExpenseService): Router => {
     try {
       const createExpenseDto = req.body as CreateExpenseDto;
 
-      const expense = await expenseService.createExpense(createExpenseDto, createExpenseDto.requestingUserId);
+      const expense = await expenseService.createExpense(createExpenseDto);
       
       res.status(HttpCode.CREATED).json(expense);
     } catch (error) {
@@ -30,12 +28,11 @@ export const createExpenseRouter = (expenseService: ExpenseService): Router => {
   });
 
   // GET /expenses/:id - Get an expense by ID
-  router.get('/:id', validateParams(GetExpenseByIdParamsSchema), validateQuery(ExpenseRequestingUserQuerySchema), async (req: Request, res: Response, next: NextFunction) => {
+  router.get('/:id', validateParams(GetExpenseByIdParamsSchema), async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params as unknown as GetExpenseByIdParamsDto;
-      const { requestingUserId } = req.query as unknown as ExpenseRequestingUserQueryDto;
 
-      const expense = await expenseService.getExpenseById(id, requestingUserId);
+      const expense = await expenseService.getExpenseById(id);
       
       res.status(HttpCode.OK).json(expense);
     } catch (error) {
@@ -44,12 +41,11 @@ export const createExpenseRouter = (expenseService: ExpenseService): Router => {
   });
 
   // GET /expenses/group/:groupId - Get all expenses for a group
-  router.get('/group/:groupId', validateParams(GetExpensesByGroupIdParamsSchema), validateQuery(ExpenseRequestingUserQuerySchema), async (req: Request, res: Response, next: NextFunction) => {
+  router.get('/group/:groupId', validateParams(GetExpensesByGroupIdParamsSchema), async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { groupId } = req.params as unknown as GetExpensesByGroupIdParamsDto;
-      const { requestingUserId } = req.query as unknown as ExpenseRequestingUserQueryDto;
 
-      const expenses = await expenseService.getExpensesByGroupId(groupId, requestingUserId);
+      const expenses = await expenseService.getExpensesByGroupId(groupId);
       
       res.status(HttpCode.OK).json(expenses);
     } catch (error) {

@@ -1,0 +1,2 @@
+-- AlterEnum
+ALTER TYPE "CsvJobStatus" ADD VALUE 'COMPLETED_WITH_ERRORS';

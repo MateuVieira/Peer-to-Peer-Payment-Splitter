@@ -1,7 +1,7 @@
-import { PrismaClient, User as PrismaUser } from '../../../../generated/prisma/index.js';
-import { logger } from '../../../../core/index.js';
-import { IUserRepository } from '../../domain/user.repository.js';
-import { User } from '../../domain/user.entity.js';
+import { PrismaClient, User as PrismaUser } from "../../../../generated/prisma/index.js";
+import { logger } from "../../../../core/index.js";
+import { IUserRepository } from "../../domain/user.repository.js";
+import { User } from "../../domain/user.entity.js";
 
 function toDomainUser(prismaUser: PrismaUser): User {
   return {
@@ -28,7 +28,7 @@ export class PrismaUserRepository implements IUserRepository {
     return prismaUser ? toDomainUser(prismaUser) : null;
   }
 
-  async create(data: Omit<User, 'id' | 'createdAt' | 'updatedAt'>): Promise<User> {
+  async create(data: Omit<User, "id" | "createdAt" | "updatedAt">): Promise<User> {
     const prismaUser = await this.prisma.user.create({
       data: {
         name: data.name,
@@ -38,7 +38,10 @@ export class PrismaUserRepository implements IUserRepository {
     return toDomainUser(prismaUser);
   }
 
-  async update(userId: string, data: Partial<Omit<User, 'id' | 'createdAt' | 'updatedAt'>>): Promise<User | null> {
+  async update(
+    userId: string,
+    data: Partial<Omit<User, "id" | "createdAt" | "updatedAt">>
+  ): Promise<User | null> {
     try {
       const prismaUser = await this.prisma.user.update({
         where: { id: userId },
@@ -61,7 +64,7 @@ export class PrismaUserRepository implements IUserRepository {
       });
     } catch (error) {
       logger.error({ err: error, userId }, `Error deleting user ${userId}`);
-      throw error; 
+      throw error;
     }
   }
 }

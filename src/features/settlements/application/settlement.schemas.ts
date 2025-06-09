@@ -32,13 +32,3 @@ export const GetByUserInGroupParamsSchema = z.object({
 });
 export type GetByUserInGroupParamsDto = z.infer<typeof GetByUserInGroupParamsSchema>;
 
-export const GetByUserInGroupQuerySchema = z.object({
-  requestingUserId: z.string().uuid({ message: 'Requesting User ID must be a valid UUID.' }),
-});
-export type GetByUserInGroupQueryDto = z.infer<typeof GetByUserInGroupQuerySchema>;
-
-export const RequestingUserQuerySchema = z.object({
-    requestingUserId: z.string().uuid({ message: 'Requesting User ID must be a valid UUID.' }),
-});
-export type RequestingUserQueryDto = z.infer<typeof RequestingUserQuerySchema>;
-

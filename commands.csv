@@ -1,0 +1,5 @@
+commandType,description,currency,amount,settlementDate,groupId,payerId,payeeId,involvedParticipantIds,requestingUserId,splitType,expenseDate
+CREATE_EXPENSE,Team Outing,USD,7500,,793ad5b8-5565-431e-a886-6a1af0ac73ef,e8264580-5e71-494e-9ac7-31e5727feeb4,,,e8264580-5e71-494e-9ac7-31e5727feeb4,EQUAL,2025-06-08
+CREATE_EXPENSE,Team Outing,USD,7500,,793ad5b8-5565-431e-a886-6a1af0ac73ef,e8264580-5e71-494e-9ac7-31e5727feeb4,,,e8264580-5e71-494e-9ac7-31e5727feeb4,EQUAL,2025-06-08
+CREATE_EXPENSE,Team Outing,USD,7500,,793ad5b8-5565-431e-a886-6a1af0ac73ef,e8264580-5e71-494e-9ac7-31e5727feeb4,,,e8264580-5e71-494e-9ac7-31e5727feeb4,EQUAL,2025-06-08
+CREATE_SETTLEMENT,,USD,500,2025-06-09,793ad5b8-5565-431e-a886-6a1af0ac73ef,e8264580-5e71-494e-9ac7-31e5727feeb4,2b508d4e-0f18-4ded-9f86-9eb1cae27b77,,,,

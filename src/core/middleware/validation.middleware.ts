@@ -1,21 +1,23 @@
-import { Request, Response, NextFunction } from 'express';
-import { AnyZodObject, ZodError } from 'zod';
-import { AppError, HttpCode } from '../error/index.js';
+import { Request, Response, NextFunction } from "express";
+import { AnyZodObject, ZodError } from "zod";
+import { AppError, HttpCode } from "../error/index.js";
 
 // Helper function to handle Zod parsing errors
 const handleZodError = (error: unknown, next: NextFunction) => {
   if (error instanceof ZodError) {
-    const errorMessages = error.errors.map((err) => err.message).join(', ');
+    const errorMessages = error.errors
+      .map((err) => `${err.path.join(".") || "object"}: ${err.message}`)
+      .join("; ");
     const appError = new AppError({
       httpCode: HttpCode.BAD_REQUEST,
-      description: `Validation failed: ${errorMessages}`,
+      description: `Validation failed. Issues: ${errorMessages}`,
       isOperational: true,
     });
     next(appError);
   } else {
     const appError = new AppError({
       httpCode: HttpCode.INTERNAL_SERVER_ERROR,
-      description: 'An unexpected error occurred during validation.',
+      description: "An unexpected error occurred during validation.",
       isOperational: true,
     });
     next(appError);

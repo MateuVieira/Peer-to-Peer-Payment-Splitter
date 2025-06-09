@@ -11,7 +11,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = env("AWS_DB_DATABASE")
 }
 
 model User {
@@ -29,15 +29,18 @@ model User {
   // Settlements related
   madeSettlements     Settlement[] @relation("SettlementPayer")
   receivedSettlements Settlement[] @relation("SettlementPayee")
+
+  // CSV Processing related
+  csvProcessingJobs CsvProcessingJob[]
 }
 
 model Group {
-  id          String   @id @default(uuid())
+  id          String       @id @default(uuid())
   name        String
   description String? // Optional field
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  members     User[]   @relation("UserGroups") // Defines the many-to-many relation with User
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  members     User[]       @relation("UserGroups") // Defines the many-to-many relation with User
   expenses    Expense[]
   settlements Settlement[]
 }
@@ -93,16 +96,102 @@ model Settlement {
   createdAt      DateTime @default(now())
 
   // Relations
-  group   Group @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  group   Group  @relation(fields: [groupId], references: [id], onDelete: Cascade)
   groupId String
 
-  payer   User @relation(name: "SettlementPayer", fields: [payerId], references: [id]) // User who made the payment
+  payer   User   @relation(name: "SettlementPayer", fields: [payerId], references: [id]) // User who made the payment
   payerId String
 
-  payee   User @relation(name: "SettlementPayee", fields: [payeeId], references: [id]) // User who received the payment
+  payee   User   @relation(name: "SettlementPayee", fields: [payeeId], references: [id]) // User who received the payment
   payeeId String
 
   @@index([groupId])
   @@index([payerId])
   @@index([payeeId])
+}
+
+// Notification Log Feature
+
+enum SentNotificationStatus {
+  PENDING
+  SUCCESS
+  FAILED
+  SKIPPED_IDEMPOTENCY
+}
+
+model SentNotification {
+  id                    String                 @id @default(uuid())
+  recipient             String
+  subject               String
+  eventId               String                 // ID of the event that triggered the notification (e.g., expenseId, settlementId)
+  eventType             String                 // Type of event (e.g., "NEW_EXPENSE", "NEW_SETTLEMENT")
+  status                SentNotificationStatus
+  sentAt                DateTime               @default(now())
+  notificationMessageId String                 // Message ID from AWS SES
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+
+  @@unique([eventId, eventType, recipient]) // Ensures idempotency
+  @@index([eventId])
+  @@index([recipient])
+}
+
+// CSV Processing Feature
+
+enum CsvJobStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  COMPLETED_WITH_ERRORS
+}
+
+enum CsvCommandType {
+  CREATE_GROUP
+  CREATE_USER
+  ADD_USER_TO_GROUP
+  REMOVE_USER_FROM_GROUP
+  CREATE_EXPENSE
+  CREATE_SETTLEMENT
+}
+
+enum CommandResultStatus {
+  SUCCESS
+  FAILED
+}
+
+model CsvProcessingJob {
+  id                  String       @id @default(uuid())
+  fileName            String
+  s3Key               String
+  bucketName          String
+  status              CsvJobStatus @default(PENDING)
+  createdAt           DateTime     @default(now())
+  updatedAt           DateTime     @updatedAt
+  completedAt         DateTime?
+  createdById         String
+  totalCommands       Int?
+  processedCommands   Int?
+  failedCommands      Int?
+  errorMessage        String?
+  processingStartedAt DateTime? // Added field to track when processing starts
+
+  createdBy      User               @relation(fields: [createdById], references: [id])
+  commandResults CsvCommandResult[]
+
+  @@index([createdById])
+}
+
+model CsvCommandResult {
+  id           String              @id @default(uuid())
+  jobId        String
+  commandType  CsvCommandType
+  lineNumber   Int
+  status       CommandResultStatus
+  errorMessage String?
+  resultId     String? // ID of created/updated resource, e.g., new Group ID or User ID
+
+  job CsvProcessingJob @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@index([jobId])
 }

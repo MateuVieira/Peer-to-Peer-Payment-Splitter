@@ -1,4 +1,12 @@
 module.exports = {
+  ignorePatterns: [
+    '.eslintrc.cjs',
+    'eslint.config.mjs',
+    'jest.config.js',
+    '.prettierrc.cjs',
+    'dist/**/*',
+    'node_modules/**/*',
+  ],
   root: true,
   env: {
     es2022: true,

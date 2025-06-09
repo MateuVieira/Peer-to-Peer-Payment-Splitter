@@ -112,7 +112,7 @@ describe('ExpenseService - Integration Tests', () => {
         });
       });
 
-      const result = await expenseService.createExpense(createExpenseDto, requestingUserId);
+      const result = await expenseService.createExpense(createExpenseDto);
 
       expect(mockGroupRepository.findById).toHaveBeenCalledWith(mockGroup.id);
       expect(mockExpenseRepository.create).toHaveBeenCalledTimes(1);
@@ -178,7 +178,7 @@ describe('ExpenseService - Integration Tests', () => {
         });
       });
 
-      const result = await expenseService.createExpense(createExpenseDto, requestingUserId);
+      const result = await expenseService.createExpense(createExpenseDto);
 
       expect(mockGroupRepository.findById).toHaveBeenCalledWith(mockGroup.id);
       expect(mockExpenseRepository.create).toHaveBeenCalledTimes(1);
@@ -241,7 +241,7 @@ describe('ExpenseService - Integration Tests', () => {
         });
       });
 
-      const result = await expenseService.createExpense(createExpenseDto, requestingUserId);
+      const result = await expenseService.createExpense(createExpenseDto);
 
       expect(mockGroupRepository.findById).toHaveBeenCalledWith(mockGroup.id);
       expect(mockExpenseRepository.create).toHaveBeenCalledTimes(1);
@@ -304,7 +304,7 @@ describe('ExpenseService - Integration Tests', () => {
         });
       });
 
-      const result = await expenseService.createExpense(createExpenseDto, requestingUserId);
+      const result = await expenseService.createExpense(createExpenseDto);
 
       expect(mockGroupRepository.findById).toHaveBeenCalledWith(mockGroup.id);
       expect(mockExpenseRepository.create).toHaveBeenCalledTimes(1);
@@ -348,11 +348,11 @@ describe('ExpenseService - Integration Tests', () => {
       mockGroupRepository.findById.mockResolvedValue(null);
 
       await expect(
-        expenseService.createExpense(createExpenseDto, requestingUserId)
+        expenseService.createExpense(createExpenseDto)
       ).rejects.toThrow(AppError);
 
       await expect(
-        expenseService.createExpense(createExpenseDto, requestingUserId)
+        expenseService.createExpense(createExpenseDto)
       ).rejects.toMatchObject({
         httpCode: HttpCode.NOT_FOUND,
         message: `Group with ID ${createExpenseDto.groupId} not found.`,
@@ -383,11 +383,11 @@ describe('ExpenseService - Integration Tests', () => {
       });
 
       await expect(
-        expenseService.createExpense(createExpenseDto, requestingUserId)
+        expenseService.createExpense(createExpenseDto)
       ).rejects.toThrow(AppError);
 
       await expect(
-        expenseService.createExpense(createExpenseDto, requestingUserId)
+        expenseService.createExpense(createExpenseDto)
       ).rejects.toMatchObject({
         httpCode: HttpCode.BAD_REQUEST,
         message: `Payer with ID ${nonMemberPayerId} is not a member of the group.`,
@@ -419,11 +419,11 @@ describe('ExpenseService - Integration Tests', () => {
       });
 
       await expect(
-        expenseService.createExpense(createExpenseDto, requestingUserId)
+        expenseService.createExpense(createExpenseDto)
       ).rejects.toThrow(AppError);
 
       await expect(
-        expenseService.createExpense(createExpenseDto, requestingUserId)
+        expenseService.createExpense(createExpenseDto)
       ).rejects.toMatchObject({
         httpCode: HttpCode.BAD_REQUEST,
         message: `Participant with ID ${nonMemberParticipantId} (selected for splitting) is not a member of the group.`,
@@ -450,11 +450,11 @@ describe('ExpenseService - Integration Tests', () => {
       mockGroupRepository.findById.mockResolvedValue(mockGroup);
 
       await expect(
-        expenseService.createExpense(createExpenseDto, requestingUserId)
+        expenseService.createExpense(createExpenseDto)
       ).rejects.toThrow(AppError);
 
       await expect(
-        expenseService.createExpense(createExpenseDto, requestingUserId)
+        expenseService.createExpense(createExpenseDto)
       ).rejects.toMatchObject({
         httpCode: HttpCode.BAD_REQUEST,
         message: 'Involved participant IDs are required and cannot be empty for PARTIAL_EQUAL split.',

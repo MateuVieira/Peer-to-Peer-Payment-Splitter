@@ -16,7 +16,7 @@ export const CreateGroupSchema = z.object({
       required_error: 'initialMemberIds array is required.',
       invalid_type_error: 'initialMemberIds must be an array of strings.',
     }
-  ).min(1, { message: 'initialMemberIds must contain at least one member ID (the creator).' }),
+  ).min(0, { message: 'initialMemberIds array can be empty.' }),
 });
 
 export const ModifyGroupMemberSchema = z.object({ 
