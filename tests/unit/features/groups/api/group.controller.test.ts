@@ -24,6 +24,8 @@ jest.mock("../../../../../src/core/logger.js", () => ({
   },
 }));
 
+const createMockDate = () => new Date("2023-01-01T00:00:00.000Z");
+
 describe("Group Controller", () => {
   let app: express.Application;
   let mockGroupService: jest.Mocked<GroupService>;
@@ -32,16 +34,16 @@ describe("Group Controller", () => {
     id: "user-1",
     name: "John Doe",
     email: "john@example.com",
-    createdAt: new Date("2023-01-01T00:00:00.000Z"),
-    updatedAt: new Date("2023-01-01T00:00:00.000Z"),
+    createdAt: createMockDate(),
+    updatedAt: createMockDate(),
   };
 
   const mockUser2 = {
     id: "user-2",
     name: "Jane Smith",
     email: "jane@example.com",
-    createdAt: new Date("2023-01-01T00:00:00.000Z"),
-    updatedAt: new Date("2023-01-01T00:00:00.000Z"),
+    createdAt: createMockDate(),
+    updatedAt: createMockDate(),
   };
 
   const mockGroup: Group = {
@@ -49,8 +51,8 @@ describe("Group Controller", () => {
     name: "Test Group",
     description: "A test group",
     members: [mockUser1, mockUser2],
-    createdAt: new Date("2023-01-01T00:00:00.000Z"),
-    updatedAt: new Date("2023-01-01T00:00:00.000Z"),
+    createdAt: createMockDate(),
+    updatedAt: createMockDate(),
   };
 
   beforeEach(() => {

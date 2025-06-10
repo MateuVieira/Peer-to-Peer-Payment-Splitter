@@ -28,6 +28,8 @@ jest.mock("../../../../../src/core/logger.js", () => ({
   },
 }));
 
+const createMockDate = () => new Date("2023-01-01T00:00:00.000Z");
+
 describe("User Controller", () => {
   let app: express.Application;
   let mockUserService: jest.Mocked<UserService>;
@@ -36,11 +38,9 @@ describe("User Controller", () => {
     id: "user-1",
     name: "Test User",
     email: "test@example.com",
-    createdAt: new Date("2023-01-01T00:00:00.000Z"),
-    updatedAt: new Date("2023-01-01T00:00:00.000Z"),
+    createdAt: createMockDate(),
+    updatedAt: createMockDate(),
   };
-
-  const createMockDate = () => new Date("2023-01-01T00:00:00.000Z");
 
   beforeEach(() => {
     app = express();
