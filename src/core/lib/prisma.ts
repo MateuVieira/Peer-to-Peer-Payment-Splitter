@@ -1,7 +1,9 @@
 // Centralized Prisma client export
 import { PrismaClient } from "../../generated/prisma/index.js";
 
+// Re-export all Prisma types and models
 export * from "../../generated/prisma/index.js";
 
-const prismaClient: PrismaClient = new PrismaClient();
+// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
+const prismaClient = new PrismaClient();
 export default prismaClient;
