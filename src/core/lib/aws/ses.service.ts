@@ -1,4 +1,9 @@
-import { SendEmailCommandInput } from "@aws-sdk/client-ses";
+import {
+  SendEmailCommand,
+  SendEmailCommandInput,
+  SendEmailCommandOutput,
+  SESClient,
+} from "@aws-sdk/client-ses";
 import { config } from "../../../config.js";
 import { v4 as uuidv4 } from "uuid";
 
@@ -10,12 +15,12 @@ interface SendEmailParams {
 }
 
 export class SESService {
-  // private sesClient: SESClient;
+  private sesClient: SESClient;
 
   constructor() {
-    // this.sesClient = new SESClient({
-    //   region: config.aws.region,
-    // });
+    this.sesClient = new SESClient({
+      region: config.aws.region,
+    });
   }
 
   async sendEmail(input: SendEmailParams): Promise<string | undefined> {
@@ -49,11 +54,19 @@ export class SESService {
       // For the test we will only generate a random message id
       // Im don't have a domain to validate the email
       // then I can only send for valid emails of the account
-      // const response: SendEmailCommandOutput = await this.sesClient.send(new SendEmailCommand(params));
+      const hasSESConfigs = config.aws.sourceEmail && config.aws.region;
+      let response: SendEmailCommandOutput;
 
-      const response = await Promise.resolve({
-        MessageId: uuidv4(),
-      });
+      if (!hasSESConfigs) {
+        response = await Promise.resolve({
+          MessageId: uuidv4(),
+          $metadata: {
+            httpStatusCode: 200,
+          },
+        });
+      } else {
+        response = await this.sesClient.send(new SendEmailCommand(params));
+      }
 
       console.log(
         `Email sent successfully. Message ID: ${response.MessageId}, To: ${params.Destination?.ToAddresses?.[0] || toAddresses}`
