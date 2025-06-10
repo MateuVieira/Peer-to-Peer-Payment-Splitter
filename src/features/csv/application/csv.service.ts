@@ -154,12 +154,6 @@ export class CsvService {
       Topic.CSV_PROCESSING_STARTED,
       payload
     );
-
-    logger.info(
-      `[CsvProcessingService] Job ID: ${jobId} successfully queued for processing. Event ${Topic.CSV_PROCESSING_STARTED} sent.`
-    );
-    // Optionally, update job status here to something like 'QUEUED'
-    // await this.csvProcessingRepository.updateJob(jobId, { status: CsvJobStatus.QUEUED, updatedAt: new Date() });
   }
 
   public async processFileFromEvent(payload: CsvProcessingStartedPayload): Promise<void> {
@@ -226,10 +220,6 @@ export class CsvService {
         await this._handleFileProcessingData(job, row as CSVRecord, summary);
       }
 
-      logger.info(
-        `[CsvProcessingService] All rows processed via for-await for job ${job.id}. Final Summary: Total: ${summary.totalRecordsInFile}, Successful: ${summary.successfulCommands}, Failed: ${summary.failedCommands}.`,
-        { jobId: job.id, summary }
-      );
       return summary;
     } catch (err) {
       logger.error(

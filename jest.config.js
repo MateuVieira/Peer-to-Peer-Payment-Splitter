@@ -5,7 +5,11 @@ export default {
     // Handles .js extensions in imports for ESM project
     // May still be needed if CJS tests import ESM source with .js extensions
     "^(\\.{1,2}/.*)\\.js$": "$1",
+    // Handle Prisma generated files specifically
+    "^(.*)/generated/prisma/index\\.js$": "$1/generated/prisma/index",
   },
+  // Make sure Jest can find the Prisma generated files
+  moduleDirectories: ["node_modules", "<rootDir>/src"],
   transform: {
     "^.+\\.tsx?$": [
       "ts-jest",

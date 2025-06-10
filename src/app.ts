@@ -35,7 +35,6 @@ app.set("trust proxy", 1);
 
 app.use(globalRateLimiter);
 app.use((req: Request, res: Response, next: NextFunction) => {
-  logger.info({ method: req.method, url: req.url, ip: req.ip }, "Incoming request");
   res.on("finish", () => {
     logger.info(
       { method: req.method, url: req.url, status: res.statusCode, ip: req.ip },

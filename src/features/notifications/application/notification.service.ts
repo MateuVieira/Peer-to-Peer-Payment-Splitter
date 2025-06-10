@@ -73,8 +73,6 @@ export class NotificationService {
       throw new Error("Missing recipient email in notification request");
     }
 
-    logger.info({ eventId, eventType, recipientEmail }, "Processing notification request");
-
     const shouldSendEmail = await this.shouldSendEmail(eventId, eventType, recipientEmail);
 
     if (!shouldSendEmail) {
@@ -100,10 +98,6 @@ export class NotificationService {
         subject,
         SentNotificationStatus.SUCCESS,
         notificationId
-      );
-      logger.info(
-        { eventId, eventType, recipientEmail, notificationId },
-        "Notification email sent successfully"
       );
     } catch (emailError) {
       logger.error(

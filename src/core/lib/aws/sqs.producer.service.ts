@@ -59,9 +59,6 @@ export class SqsProducerService implements IQueueProducer {
       });
 
       const result = await this.sqsClient.send(command);
-      logger.info(
-        `Message sent to SQS queue ${queueUrl} (topic: ${topic}) with ID: ${result.MessageId}`
-      );
       return result.MessageId;
     } catch (error) {
       logger.error(`Error sending message to SQS queue ${queueUrl} (topic: ${topic}):`, error);
@@ -86,7 +83,6 @@ export class SqsProducerService implements IQueueProducer {
 
   private resolveQueueUrl(topic: string): string | undefined {
     if (topic.startsWith("http://") || topic.startsWith("https://")) {
-      logger.debug(`Identifier '${topic}' is a direct URL.`);
       return topic;
     }
 
@@ -94,9 +90,6 @@ export class SqsProducerService implements IQueueProducer {
     const specificQueueUrl = process.env[envVarName];
 
     if (specificQueueUrl) {
-      logger.debug(
-        `Resolved topic '${topic}' to SQS queue URL '${specificQueueUrl}' from env var '${envVarName}'.`
-      );
       return specificQueueUrl;
     }
 
