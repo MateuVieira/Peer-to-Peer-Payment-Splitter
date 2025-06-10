@@ -1,4 +1,6 @@
-import { prismaClient } from "./database/index.js";
+import { PrismaClient } from "../generated/prisma/index.js";
+
+const prismaClient = new PrismaClient();
 
 // User Feature Dependencies
 import { PrismaUserRepository } from "../features/users/infrastructure/database/index.js";

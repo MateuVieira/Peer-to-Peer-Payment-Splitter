@@ -4,7 +4,7 @@ export default {
   moduleNameMapper: {
     // Support for path aliases from tsconfig.json with special handling for index.js files
     "^@/(.*)$": "<rootDir>/src/$1",
-    "^(@prisma|@core/lib/prisma\.js)$": "<rootDir>/src/generated/prisma/index",
+    "^(@prisma|@core/lib/prisma\.js)$": "<rootDir>/src/generated/prisma/index.js", // Added .js extension
     "^@core/index\.js$": "<rootDir>/src/core/index",
     "^@core/(.+)\.js$": "<rootDir>/src/core/$1",
     "^@core/(.*)$": "<rootDir>/src/core/$1",
@@ -15,20 +15,20 @@ export default {
     
     // Legacy paths - still needed during transition to path aliases
     // Map the specific path used in the group repository - this needs to be first for precedence
-    "^../../../../generated/prisma/index\.js$": "<rootDir>/src/generated/prisma/index",
+    "^../../../../generated/prisma/index\.js$": "<rootDir>/src/generated/prisma/index.js", // Added .js extension
     
     // Handle all possible Prisma client imports
-    "^(.*/|)generated/prisma/index\.js$": "<rootDir>/src/generated/prisma/index",
-    "^(.*/|)src/generated/prisma/index\.js$": "<rootDir>/src/generated/prisma/index",
+    "^(.*/|)generated/prisma/index\.js$": "<rootDir>/src/generated/prisma/index.js", // Added .js extension
+    "^(.*/|)src/generated/prisma/index\.js$": "<rootDir>/src/generated/prisma/index.js", // Added .js extension
     
     // Handle any number of relative path levels (more generic pattern)
-    "^(\.\./)+generated/prisma/index\.js$": "<rootDir>/src/generated/prisma/index",
+    "^(\.\./)+(generated|src/generated)/prisma/index\.js$": "<rootDir>/src/generated/prisma/index.js", // Added .js extension
     
-    // Handle the core database module
-    "^(.*/|)core/database/prisma\.client\.js$": "<rootDir>/src/core/database/prisma.client",
+    // Handle the core database module - not needed anymore since we removed prisma.client.ts
+    // "^(.*/|)core/database/prisma\.client\.js$": "<rootDir>/src/core/database/prisma.client.js",
     
-    // Handle the new centralized Prisma client
-    "^(.*/|)core/lib/prisma\.js$": "<rootDir>/src/generated/prisma/index",
+    // Direct access to generated Prisma client
+    "^(.*/|)core/lib/prisma\.js$": "<rootDir>/src/generated/prisma/index.js", // Added .js extension
     
     // Handles .js extensions in imports for ESM project - this must come after specific mappers
     "^(\.{1,2}/.*)\.js$": "$1",
