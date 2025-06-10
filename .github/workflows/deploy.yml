@@ -7,12 +7,16 @@ on:
     paths:
       - "src/**"
       - "prisma/**"
+      - "tests/**"
       - "Dockerfile"
       - ".dockerignore"
       - "package.json"
       - "pnpm-lock.yaml"
       - ".github/workflows/deploy.yml"
       - "task-definition.json"
+      - "jest.config.js"
+      - "tsconfig.json"
+      - ".eslintrc.cjs"
 
 # Set this to true to actually perform the deployment
 env:
