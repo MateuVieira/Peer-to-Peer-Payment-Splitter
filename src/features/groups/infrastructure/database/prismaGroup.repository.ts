@@ -3,7 +3,7 @@ import prismaClient, {
   Prisma,
   Group as PrismaGroupModel,
   User as PrismaUserModel,
-} from "@core/lib/prisma.js";
+} from "../../../../../src/core/lib/prisma.js";
 import {
   IGroupRepository,
   PaginatedGroupsResult,
@@ -37,7 +37,7 @@ function toDomainGroup(prismaGroup: PrismaGroupModel & { members: PrismaUserMode
 
 export class PrismaGroupRepository implements IGroupRepository {
   private prisma: PrismaClient;
-  
+
   constructor() {
     this.prisma = prismaClient;
   }
