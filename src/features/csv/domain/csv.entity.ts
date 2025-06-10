@@ -4,7 +4,6 @@ export enum CsvJobStatus {
   COMPLETED = "COMPLETED",
   FAILED = "FAILED",
   COMPLETED_WITH_ERRORS = "COMPLETED_WITH_ERRORS",
-  // Consider adding QUEUED if needed for more granularity between PENDING and PROCESSING
 }
 
 export enum CsvCommandType {

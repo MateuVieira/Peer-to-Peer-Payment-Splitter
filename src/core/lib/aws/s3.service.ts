@@ -1,4 +1,3 @@
-// src/core/lib/aws/s3.service.ts
 import {
   S3Client,
   PutObjectCommand,

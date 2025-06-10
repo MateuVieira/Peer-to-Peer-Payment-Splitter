@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from "express";
 import { AnyZodObject, ZodError } from "zod";
 import { AppError, HttpCode } from "../error/index.js";
 
-// Helper function to handle Zod parsing errors
 const handleZodError = (error: unknown, next: NextFunction) => {
   if (error instanceof ZodError) {
     const errorMessages = error.errors

@@ -2,6 +2,7 @@ import express, { Request, Response, NextFunction } from "express";
 import cors from "cors";
 import helmet from "helmet";
 import dotenv from "dotenv";
+import { globalRateLimiter } from "./core/middleware/rate-limiter.middleware.js";
 import { AppError, HttpCode } from "./core/error/index.js";
 import {
   logger,
@@ -27,6 +28,10 @@ const app: express.Express = express();
 app.use(cors());
 app.use(helmet());
 app.use(express.json());
+
+app.set("trust proxy", 1);
+
+app.use(globalRateLimiter);
 app.use((req: Request, res: Response, next: NextFunction) => {
   logger.info({ method: req.method, url: req.url, ip: req.ip }, "Incoming request");
   res.on("finish", () => {

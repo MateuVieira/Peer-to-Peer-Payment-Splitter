@@ -1,4 +1,3 @@
-// src/core/events/event-producer.interface.ts
 import { Topic } from "./topics.js";
 
 /**

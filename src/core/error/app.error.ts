@@ -14,7 +14,7 @@ interface AppErrorArgs {
   name?: string;
   httpCode: HttpCode;
   description: string;
-  isOperational?: boolean; // Errors that are expected and handled (e.g., validation errors)
+  isOperational?: boolean;
 }
 
 export class AppError extends Error {
@@ -34,6 +34,6 @@ export class AppError extends Error {
       this.isOperational = args.isOperational;
     }
 
-    Error.captureStackTrace(this); // Capture stack trace, excluding constructor call
+    Error.captureStackTrace(this);
   }
 }

@@ -1,4 +1,3 @@
-// src/core/lib/aws/sqs.producer.service.ts
 import { SQSClient, SendMessageCommand, type MessageAttributeValue } from "@aws-sdk/client-sqs";
 import { IQueueProducer } from "../../events/event-producer.interface.js";
 import { AppError, HttpCode } from "../../error/app.error.js";

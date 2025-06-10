@@ -60,7 +60,7 @@ export class PrismaCsvRepository implements ICsvRepository {
     } catch (error) {
       logger.error("Error creating CSV processing job:", { error, jobData });
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
-        // Handle known Prisma errors (e.g., unique constraint violation)
+        // Handle known Prisma errors
       }
 
       throw error;
