@@ -4,6 +4,7 @@ module.exports = {
     'eslint.config.mjs',
     '_eslint.config.mjs',
     'jest.config.js',
+    'jest.setup.js',
     '.prettierrc.cjs',
     'dist/**/*',
     'node_modules/**/*',
