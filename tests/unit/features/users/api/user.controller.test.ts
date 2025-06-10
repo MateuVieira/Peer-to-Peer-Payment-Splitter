@@ -15,6 +15,15 @@ import {
   UpdateUserSchema,
 } from "../../../../../src/features/users/application/index.js";
 
+// Mock the Prisma client
+jest.mock("../../../../../src/core/database/prisma.client.js", () => ({
+  __esModule: true,
+  default: {
+    $connect: jest.fn(),
+    $disconnect: jest.fn(),
+  },
+}));
+
 jest.mock("../../../../../src/core/index.js", () => ({
   validateRequest: jest.fn(() => (req: Request, res: Response, next: NextFunction) => next()),
 }));

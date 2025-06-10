@@ -7,6 +7,15 @@ import { AppError, HttpCode } from "../../../../../src/core/error/app.error.js";
 import request from "supertest";
 import express from "express";
 
+// Mock the Prisma client
+jest.mock("../../../../../src/core/database/prisma.client.js", () => ({
+  __esModule: true,
+  default: {
+    $connect: jest.fn(),
+    $disconnect: jest.fn(),
+  },
+}));
+
 jest.mock("../../../../../src/core/middleware/validation.middleware.js", () => ({
   validateRequest: jest.fn(() => (req: Request, res: Response, next: NextFunction) => next()),
   validateParams: jest.fn(() => (req: Request, res: Response, next: NextFunction) => next()),
