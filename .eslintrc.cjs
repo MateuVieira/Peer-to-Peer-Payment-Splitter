@@ -68,6 +68,23 @@ module.exports = {
       },
     },
     {
+      // Special rules for Prisma repository files
+      files: ['src/**/prisma*.repository.ts', 'src/**/prisma*.client.ts', 'src/**/**/prisma*.repository.ts'],
+      parser: '@typescript-eslint/parser',
+      parserOptions: {
+        project: './tsconfig.json',
+      },
+      rules: {
+        // Disable unsafe rules for Prisma repositories
+        '@typescript-eslint/no-unsafe-assignment': 'off',
+        '@typescript-eslint/no-unsafe-member-access': 'off',
+        '@typescript-eslint/no-unsafe-call': 'off',
+        '@typescript-eslint/no-unsafe-return': 'off',
+        '@typescript-eslint/no-unsafe-argument': 'off',
+        '@typescript-eslint/no-redundant-type-constituents': 'off',
+      },
+    },
+    {
       files: [
         '**/*.test.ts',
         '**/*.spec.ts',
