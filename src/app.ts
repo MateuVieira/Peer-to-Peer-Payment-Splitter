@@ -19,6 +19,8 @@ import { createExpenseRouter } from "./features/expenses/api/expense.controller.
 import { createCsvRouter } from "./features/csv/api/csv.controller.js";
 import { startCentralConsumer } from "./core/events/central.consumer.js";
 
+const DEFAULT_PATH = "/api/v1";
+
 startCentralConsumer();
 
 dotenv.config();
@@ -49,11 +51,11 @@ const settlementRouter = createSettlementRouter(settlementService);
 const expenseRouter = createExpenseRouter(expenseService);
 const csvRouter = createCsvRouter(csvProcessingService);
 
-app.use("/api/v1/users", userRouter);
-app.use("/api/v1/groups", groupRouter);
-app.use("/api/v1/settlements", settlementRouter);
-app.use("/api/v1/expenses", expenseRouter);
-app.use("/api/v1/csv", csvRouter);
+app.use(`${DEFAULT_PATH}/users`, userRouter);
+app.use(`${DEFAULT_PATH}/groups`, groupRouter);
+app.use(`${DEFAULT_PATH}/settlements`, settlementRouter);
+app.use(`${DEFAULT_PATH}/expenses`, expenseRouter);
+app.use(`${DEFAULT_PATH}/csv`, csvRouter);
 
 app.get("/health", (_req: Request, res: Response) => {
   res.status(200).json({ status: "UP", timestamp: new Date().toISOString() });
