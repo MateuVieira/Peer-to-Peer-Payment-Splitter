@@ -1,9 +1,9 @@
-import prismaClient, {
+import {
   PrismaClient,
   Prisma,
   Group as PrismaGroupModel,
   User as PrismaUserModel,
-} from "../../../../../src/core/lib/prisma.js";
+} from "../../../../generated/prisma/index.js";
 import {
   IGroupRepository,
   PaginatedGroupsResult,
@@ -36,11 +36,7 @@ function toDomainGroup(prismaGroup: PrismaGroupModel & { members: PrismaUserMode
 }
 
 export class PrismaGroupRepository implements IGroupRepository {
-  private prisma: PrismaClient;
-
-  constructor() {
-    this.prisma = prismaClient;
-  }
+  constructor(private readonly prisma: PrismaClient) {}
 
   async findById(id: string): Promise<Group | null> {
     const prismaGroup = await this.prisma.group.findUnique({

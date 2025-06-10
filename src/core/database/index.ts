@@ -1,1 +1,2 @@
-export { default as prismaClient } from "./prisma.client.js";
+export * from "./prisma.errors.js";
+export * from "./prisma.mappers.js";
