@@ -2,9 +2,13 @@ export default {
   preset: "ts-jest/presets/default",
   testEnvironment: "node",
   moduleNameMapper: {
-    // Handle Prisma generated files specifically with more robust patterns
+    // Handle all possible Prisma client imports
     "^(.*/|)generated/prisma/index\.js$": "<rootDir>/src/generated/prisma/index",
     "^(.*/|)src/generated/prisma/index\.js$": "<rootDir>/src/generated/prisma/index",
+    // Handle direct imports from repositories at any depth
+    "^(../)+generated/prisma/index\.js$": "<rootDir>/src/generated/prisma/index",
+    // Handle the core database module
+    "^(.*/|)core/database/prisma\.client\.js$": "<rootDir>/src/core/database/prisma.client",
     // Handles .js extensions in imports for ESM project - this must come after more specific mappers
     "^(\.{1,2}/.*)\.js$": "$1",
   },
