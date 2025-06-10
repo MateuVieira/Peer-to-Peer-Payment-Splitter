@@ -1,18 +1,18 @@
-import {
+import prismaClient, {
   PrismaClient,
   Prisma,
   Group as PrismaGroupModel,
   User as PrismaUserModel,
-} from "../../../../generated/prisma/index.js";
+} from "@core/lib/prisma.js";
 import {
   IGroupRepository,
   PaginatedGroupsResult,
   PaginationParams,
-} from "../../domain/group.repository.js";
-import { logger } from "../../../../core/index.js";
-import { PrismaErrorCodes } from "../../../../core/database/prisma.errors.js";
-import { Group } from "../../domain/group.entity.js";
-import { User } from "../../../users/domain/user.entity.js";
+} from "@features/groups/domain/group.repository.js";
+import { logger } from "@core/index.js";
+import { PrismaErrorCodes } from "@core/database/prisma.errors.js";
+import { Group } from "@features/groups/domain/group.entity.js";
+import { User } from "@features/users/domain/user.entity.js";
 
 function toDomainUser(prismaUser: PrismaUserModel): User {
   return {
@@ -36,7 +36,11 @@ function toDomainGroup(prismaGroup: PrismaGroupModel & { members: PrismaUserMode
 }
 
 export class PrismaGroupRepository implements IGroupRepository {
-  constructor(private prisma: PrismaClient) {}
+  private prisma: PrismaClient;
+  
+  constructor() {
+    this.prisma = prismaClient;
+  }
 
   async findById(id: string): Promise<Group | null> {
     const prismaGroup = await this.prisma.group.findUnique({
@@ -83,7 +87,7 @@ export class PrismaGroupRepository implements IGroupRepository {
         include: { members: true },
       });
       return toDomainGroup(updatedPrismaGroup);
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error(
         { err: error, groupId, userId },
         `Error adding member ${userId} to group ${groupId}`
@@ -104,7 +108,7 @@ export class PrismaGroupRepository implements IGroupRepository {
         include: { members: true },
       });
       return toDomainGroup(updatedPrismaGroup);
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error(
         { err: error, groupId, userId },
         `Error removing member ${userId} from group ${groupId}`
@@ -127,7 +131,7 @@ export class PrismaGroupRepository implements IGroupRepository {
         include: { members: true },
       });
       return toDomainGroup(updatedPrismaGroup);
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error({ err: error, groupId, data }, `Error updating group ${groupId}`);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === PrismaErrorCodes.RECORD_NOT_FOUND) {
@@ -144,7 +148,7 @@ export class PrismaGroupRepository implements IGroupRepository {
         where: { id: groupId },
       });
       return true;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error({ err: error, groupId }, `Error deleting group ${groupId}`);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === PrismaErrorCodes.RECORD_NOT_FOUND) {
@@ -176,7 +180,7 @@ export class PrismaGroupRepository implements IGroupRepository {
         groups: prismaGroups.map(toDomainGroup),
         total,
       };
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error({ err: error }, "Error fetching all groups");
       throw error;
     }

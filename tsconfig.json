@@ -36,6 +36,16 @@
     "esModuleInterop": true /* Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'. */,
     "resolveJsonModule": true /* Include modules imported with '.json' extension */,
     "allowSyntheticDefaultImports": true /* Allow default imports from modules with no default export. This does not affect code emit, just typechecking. */,
+    
+    /* Path Aliases */
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@prisma": ["src/generated/prisma/index.js"],
+      "@core/*": ["src/core/*"],
+      "@features/*": ["src/features/*"],
+      "@test/*": ["tests/*"]
+    },
 
     /* Advanced Options */
     "skipLibCheck": true /* Skip type checking of all declaration files (*.d.ts). */,
