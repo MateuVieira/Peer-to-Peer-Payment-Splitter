@@ -160,3 +160,4 @@ Implemented tiered rate limiting with different thresholds for:
 - Need to analyze DB for strategies for replication and pool connections to optimize performance
 - Add caching layer for frequently accessed data
 - Authorization layer is not implemented
+- CSV financial transactions are currently processed synchronously for data consistency. Future optimization could explore controlled asynchronous processing where transaction dependencies allow.

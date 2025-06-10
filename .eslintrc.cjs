@@ -69,7 +69,14 @@ module.exports = {
     },
     {
       // Special rules for Prisma repository files
-      files: ['src/**/prisma*.repository.ts', 'src/**/prisma*.client.ts', 'src/**/**/prisma*.repository.ts'],
+      files: [
+        'src/**/prisma*.repository.ts', 
+        'src/**/prisma*.client.ts', 
+        'src/**/**/prisma*.repository.ts',
+        'src/**/Prisma*.ts',
+        'src/**/Prisma*.repository.ts',
+        'src/features/csv/infrastructure/PrismaCsvRepository.ts'
+      ],
       parser: '@typescript-eslint/parser',
       parserOptions: {
         project: './tsconfig.json',
