@@ -3,5 +3,5 @@ import { PrismaClient } from "../../generated/prisma/index.js";
 
 export * from "../../generated/prisma/index.js";
 
-const prismaClient = new PrismaClient();
+const prismaClient: PrismaClient = new PrismaClient();
 export default prismaClient;
