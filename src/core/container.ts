@@ -1,6 +1,7 @@
 import { PrismaClient } from "../generated/prisma/index.js";
 
-const prismaClient = new PrismaClient();
+// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
+const prismaClient: PrismaClient = new PrismaClient();
 
 // User Feature Dependencies
 import { PrismaUserRepository } from "../features/users/infrastructure/database/index.js";
