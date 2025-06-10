@@ -16,6 +16,7 @@ on:
       - "task-definition.json"
       - "jest.config.js"
       - "tsconfig.json"
+      - "tsconfig.spec.json"
       - ".eslintrc.cjs"
 
 # Set this to true to actually perform the deployment
