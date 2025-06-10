@@ -14,6 +14,8 @@ interface SendEmailParams {
   htmlBody?: string;
 }
 
+const CHARSET = "UTF-8";
+
 export class SESService {
   private sesClient: SESClient;
 
@@ -30,8 +32,8 @@ export class SESService {
       throw new Error("Email must have either a body or an htmlBody.");
     }
 
-    const bodyParams = body ? { Text: { Data: body, Charset: "UTF-8" } } : undefined;
-    const htmlBodyParams = htmlBody ? { Html: { Data: htmlBody, Charset: "UTF-8" } } : undefined;
+    const bodyParams = body ? { Text: { Data: body, Charset: CHARSET } } : undefined;
+    const htmlBodyParams = htmlBody ? { Html: { Data: htmlBody, Charset: CHARSET } } : undefined;
 
     const params: SendEmailCommandInput = {
       Source: config.aws.sourceEmail,
@@ -41,7 +43,7 @@ export class SESService {
       Message: {
         Subject: {
           Data: subject,
-          Charset: "UTF-8",
+          Charset: CHARSET,
         },
         Body: {
           ...bodyParams,
