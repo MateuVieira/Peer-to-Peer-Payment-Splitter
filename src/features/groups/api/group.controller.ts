@@ -8,8 +8,8 @@ import {
   ModifyGroupMemberSchema,
   UpdateGroupSchema,
 } from "../application/index.js";
-import { AppError, HttpCode } from "../../../core/error/index.js";
-import { validateRequest } from "../../../core/index.js";
+import { AppError, HttpCode } from "@core/error/index.js";
+import { validateRequest } from "@core/index.js";
 
 export function createGroupRouter(groupService: GroupService): Router {
   const groupRouter: Router = Router();

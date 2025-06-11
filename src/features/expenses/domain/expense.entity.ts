@@ -1,5 +1,5 @@
-import type { User } from "../../users/domain/user.entity.js";
-import type { Group } from "../../groups/domain/group.entity.js";
+import type { User } from "@features/users/domain/user.entity.js";
+import type { Group } from "@features/groups/domain/group.entity.js";
 
 export enum SplitType {
   EQUAL = "EQUAL",

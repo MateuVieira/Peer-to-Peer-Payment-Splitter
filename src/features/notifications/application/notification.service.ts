@@ -1,9 +1,9 @@
-import { SESService } from "../../../core/lib/aws/ses.service.js";
+import { SESService } from "@core/lib/aws/ses.service.js";
 import {
   type ISentNotificationLogRepository,
   SentNotificationStatus,
-} from "../domain/sentNotification.types.js";
-import { logger } from "../../../core/logger.js";
+} from "@features/notifications/domain/sentNotification.types.js";
+import { logger } from "@core/logger.js";
 
 export interface NotificationRequestParams {
   eventId: string;

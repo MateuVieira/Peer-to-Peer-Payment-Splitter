@@ -1,9 +1,9 @@
 import type { Message as SQSMessage } from "@aws-sdk/client-sqs";
-import { IMessageHandler } from "../../../core/events/message-handler.interface.js";
-import { Topic } from "../../../core/events/topics.js";
-import { logger } from "../../../core/logger.js";
-import { ExpenseCompletedPayload } from "../domain/expense.entity.js";
-import { ExpenseService } from "../application/expense.service.js";
+import { IMessageHandler } from "@core/events/message-handler.interface.js";
+import { Topic } from "@core/events/topics.js";
+import { logger } from "@core/logger.js";
+import { ExpenseCompletedPayload } from "@features/expenses/domain/expense.entity.js";
+import { ExpenseService } from "@features/expenses/application/expense.service.js";
 
 export class ExpenseCompletedHandler implements IMessageHandler<ExpenseCompletedPayload> {
   readonly topic = Topic.EXPENSE_CREATED;

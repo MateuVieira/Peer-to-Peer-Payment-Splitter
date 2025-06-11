@@ -1,7 +1,7 @@
 import { PrismaClient, User as PrismaUser } from "../../../../generated/prisma/index.js";
-import { logger } from "../../../../core/index.js";
-import { IUserRepository } from "../../domain/user.repository.js";
-import { User } from "../../domain/user.entity.js";
+import { logger } from "@core/index.js";
+import { IUserRepository } from "@features/users/domain/user.repository.js";
+import { User } from "@features/users/domain/user.entity.js";
 
 function toDomainUser(prismaUser: PrismaUser): User {
   return {

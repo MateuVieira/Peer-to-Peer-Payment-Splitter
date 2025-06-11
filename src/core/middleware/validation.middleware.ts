@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { AnyZodObject, ZodError } from "zod";
-import { AppError, HttpCode } from "../error/index.js";
+import { AppError, HttpCode } from "@core/error/index.js";
 
 const handleZodError = (error: unknown, next: NextFunction) => {
   if (error instanceof ZodError) {

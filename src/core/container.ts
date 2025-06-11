@@ -3,29 +3,26 @@ import { PrismaClient } from "../generated/prisma/index.js";
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
 const prismaClient: PrismaClient = new PrismaClient();
 
-// User Feature Dependencies
-import { PrismaUserRepository } from "../features/users/infrastructure/database/index.js";
-import { UserService } from "../features/users/application/index.js";
-
-// Group Feature Dependencies
-import { PrismaGroupRepository } from "../features/groups/infrastructure/database/index.js";
-import { GroupService } from "../features/groups/application/group.service.js";
-import { SqsProducerService } from "./lib/aws/sqs.producer.service.js";
-import type { IQueueProducer } from "./events/event-producer.interface.js";
-import { PrismaSettlementRepository } from "../features/settlements/infrastructure/database/prismaSettlement.repository.js";
-import { SettlementService } from "../features/settlements/application/settlement.service.js";
-import { PrismaExpenseRepository } from "../features/expenses/infrastructure/database/prismaExpense.repository.js";
-import { ExpenseService } from "../features/expenses/application/expense.service.js";
-import { PrismaCsvRepository } from "../features/csv/infrastructure/PrismaCsvRepository.js";
-import { CsvService } from "../features/csv/application/csv.service.js";
-import { NotificationService } from "../features/notifications/application/notification.service.js";
-import { PrismaNotificationLogRepository } from "../features/notifications/infrastructure/prismaNotificationLog.repository.js";
-import { S3Service } from "./lib/aws/s3.service.js";
-import { ProcessService } from "../features/csv/application/process.service.js";
-import { ICommandStrategy } from "../features/csv/domain/command.strategy.types.js";
-import { CreateExpenseStrategy } from "../features/csv/application/create-expense.strategy.js";
-import { CreateSettlementStrategy } from "../features/csv/application/create-settlement.strategy.js";
-import { SESService } from "./lib/aws/ses.service.js";
+import { PrismaUserRepository } from "@features/users/infrastructure/database/index.js";
+import { UserService } from "@features/users/application/index.js";
+import { PrismaGroupRepository } from "@features/groups/infrastructure/database/index.js";
+import { GroupService } from "@features/groups/application/group.service.js";
+import { SqsProducerService } from "@core/lib/aws/sqs.producer.service.js";
+import type { IQueueProducer } from "@core/events/event-producer.interface.js";
+import { PrismaSettlementRepository } from "@features/settlements/infrastructure/database/prismaSettlement.repository.js";
+import { SettlementService } from "@features/settlements/application/settlement.service.js";
+import { PrismaExpenseRepository } from "@features/expenses/infrastructure/database/prismaExpense.repository.js";
+import { ExpenseService } from "@features/expenses/application/expense.service.js";
+import { PrismaCsvRepository } from "@features/csv/infrastructure/PrismaCsvRepository.js";
+import { CsvService } from "@features/csv/application/csv.service.js";
+import { NotificationService } from "@features/notifications/application/notification.service.js";
+import { PrismaNotificationLogRepository } from "@features/notifications/infrastructure/prismaNotificationLog.repository.js";
+import { S3Service } from "@core/lib/aws/s3.service.js";
+import { ProcessService } from "@features/csv/application/process.service.js";
+import { ICommandStrategy } from "@features/csv/domain/command.strategy.types.js";
+import { CreateExpenseStrategy } from "@features/csv/application/create-expense.strategy.js";
+import { CreateSettlementStrategy } from "@features/csv/application/create-settlement.strategy.js";
+import { SESService } from "@core/lib/aws/ses.service.js";
 
 export const userRepository = new PrismaUserRepository(prismaClient);
 export const groupRepository = new PrismaGroupRepository(prismaClient);

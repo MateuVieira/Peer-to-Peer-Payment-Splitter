@@ -1,11 +1,11 @@
 import { PrismaClient, Prisma } from "../../../../generated/prisma/index.js";
-import type { Expense, ExpenseParticipant } from "../../domain/expense.entity.js";
-import type { IExpenseRepository, CreateExpenseData } from "../../domain/expense.repository.js";
-import { AppError, HttpCode } from "../../../../core/error/app.error.js";
-import { PrismaErrorCodes } from "../../../../core/database/prisma.errors.js";
-import { SplitType as DomainSplitType } from "../../domain/expense.entity.js";
-import type { User } from "../../../users/domain/user.entity.js";
-import { mapAuditableEntity } from "../../../../core/database/prisma.mappers.js";
+import type { Expense, ExpenseParticipant } from "@features/expenses/domain/expense.entity.js";
+import type { IExpenseRepository, CreateExpenseData } from "@features/expenses/domain/expense.repository.js";
+import { AppError, HttpCode } from "@core/error/app.error.js";
+import { PrismaErrorCodes } from "@core/database/prisma.errors.js";
+import { SplitType as DomainSplitType } from "@features/expenses/domain/expense.entity.js";
+import type { User } from "@features/users/domain/user.entity.js";
+import { mapAuditableEntity } from "@core/database/prisma.mappers.js";
 
 type PrismaExpenseWithDetails = Prisma.ExpenseGetPayload<{
   include: {

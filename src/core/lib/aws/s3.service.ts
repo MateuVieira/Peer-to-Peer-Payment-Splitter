@@ -7,7 +7,7 @@ import {
 } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { config } from "../../../config.js";
-import { AppError, HttpCode } from "../../error/app.error.js";
+import { AppError, HttpCode } from "@core/error/app.error.js";
 import { Readable } from "stream";
 
 export class S3Service {

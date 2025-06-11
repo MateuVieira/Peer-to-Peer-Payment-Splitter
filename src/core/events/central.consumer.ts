@@ -1,11 +1,11 @@
-import { SqsConsumerService } from "../lib/aws/sqs.consumer.service.js";
+import { SqsConsumerService } from "@core/lib/aws/sqs.consumer.service.js";
 import { config } from "../../config.js";
-import { logger } from "../logger.js";
-import { NotificationSendHandler } from "../../features/notifications/consumer/notification.send.handler.js";
-import { SettlementCompletedHandler } from "../../features/settlements/consumer/settlement-created.handler.js";
-import { ExpenseCompletedHandler } from "../../features/expenses/consumer/expense-completed.handler.js";
-import { CsvProcessingStartedHandler } from "../../features/csv/consumer/csv-started.handler.js";
-import { CsvProcessingCompletedHandler } from "../../features/csv/consumer/csv-completed.handler.js";
+import { logger } from "@core/logger.js";
+import { NotificationSendHandler } from "@features/notifications/consumer/notification.send.handler.js";
+import { SettlementCompletedHandler } from "@features/settlements/consumer/settlement-created.handler.js";
+import { ExpenseCompletedHandler } from "@features/expenses/consumer/expense-completed.handler.js";
+import { CsvProcessingStartedHandler } from "@features/csv/consumer/csv-started.handler.js";
+import { CsvProcessingCompletedHandler } from "@features/csv/consumer/csv-completed.handler.js";
 import {
   notificationService,
   settlementService,

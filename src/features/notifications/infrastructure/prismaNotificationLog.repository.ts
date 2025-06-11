@@ -1,5 +1,5 @@
 import { PrismaClient } from "../../../generated/prisma/index.js";
-import { logger } from "../../../core/logger.js";
+import { logger } from "@core/logger.js";
 
 import {
   SentNotificationStatus,

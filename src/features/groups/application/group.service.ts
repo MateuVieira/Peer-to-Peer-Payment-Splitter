@@ -2,11 +2,11 @@ import {
   IGroupRepository,
   PaginatedGroupsResult,
   PaginationParams,
-} from "../domain/group.repository.js";
-import { Group } from "../domain/group.entity.js";
-import { IUserRepository } from "../../users/domain/user.repository.js";
-import { AppError, HttpCode } from "../../../core/error/app.error.js";
-import { logger } from "../../../core/logger.js";
+} from "@features/groups/domain/group.repository.js";
+import { Group } from "@features/groups/domain/group.entity.js";
+import { IUserRepository } from "@features/users/domain/user.repository.js";
+import { AppError, HttpCode } from "@core/error/app.error.js";
+import { logger } from "@core/logger.js";
 
 export interface CreateGroup {
   name: string;

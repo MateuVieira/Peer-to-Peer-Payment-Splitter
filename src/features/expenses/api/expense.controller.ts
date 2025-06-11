@@ -1,6 +1,6 @@
 import { Router, type Request, type Response, type NextFunction } from "express";
 import type { ExpenseService } from "../application/expense.service.js";
-import { validateRequest, validateParams } from "../../../core/middleware/validation.middleware.js";
+import { validateRequest, validateParams } from "@core/middleware/validation.middleware.js";
 import {
   CreateExpenseSchema,
   type CreateExpenseDto,
@@ -9,7 +9,7 @@ import {
   GetExpensesByGroupIdParamsSchema,
   type GetExpensesByGroupIdParamsDto,
 } from "../application/expense.schemas.js";
-import { HttpCode } from "../../../core/error/app.error.js";
+import { HttpCode } from "@core/error/app.error.js";
 
 export const createExpenseRouter = (expenseService: ExpenseService): Router => {
   const router = Router();
