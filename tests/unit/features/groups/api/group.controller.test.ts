@@ -11,8 +11,14 @@ import { AppError, HttpCode } from "../../../../../src/core/error/app.error.js";
 import request from "supertest";
 import express from "express";
 
-jest.mock("../../../../src/generated/prisma/index.js", () => ({
-  PrismaClient: jest.fn(),
+jest.mock("../../../../../src/core/container.ts", () => ({
+  groupService: {
+    getGroups: jest.fn(),
+    getGroupById: jest.fn(),
+    createGroup: jest.fn(),
+    updateGroup: jest.fn(),
+    deleteGroup: jest.fn(),
+  },
 }));
 
 jest.mock("../../../../../src/core/middleware/validation.middleware.js", () => ({
