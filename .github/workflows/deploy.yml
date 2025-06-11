@@ -49,6 +49,11 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
+      - name: Run CI environment debug script
+        run: |
+          chmod +x ci-debug.sh
+          ./ci-debug.sh
+          
       - name: Run linters and tests
         run: |
           pnpm lint

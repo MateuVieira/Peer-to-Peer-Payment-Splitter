@@ -11,6 +11,10 @@ import { AppError, HttpCode } from "../../../../../src/core/error/app.error.js";
 import request from "supertest";
 import express from "express";
 
+jest.mock("../../../../src/generated/prisma/index.js", () => ({
+  PrismaClient: jest.fn(),
+}));
+
 jest.mock("../../../../../src/core/middleware/validation.middleware.js", () => ({
   validateRequest: jest.fn(() => (req: Request, res: Response, next: NextFunction) => next()),
 }));
