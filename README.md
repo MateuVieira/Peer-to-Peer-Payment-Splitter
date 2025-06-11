@@ -152,6 +152,7 @@ Implemented tiered rate limiting with different thresholds for:
 
 ## Known Limitations
 
+- Currently, S3 bucket triggers are not implemented for automatically starting the CSV process flow, though this could be added with minimal configuration
 - The SES service uses mocked responses when proper AWS SES configurations are not available
 - In-memory rate limiting, when scaled to multiple instances, should be migrated to Redis
 - Additional monitoring and observability should be implemented for production use
@@ -160,4 +161,5 @@ Implemented tiered rate limiting with different thresholds for:
 - Need to analyze DB for strategies for replication and pool connections to optimize performance
 - Add caching layer for frequently accessed data
 - Authorization layer is not implemented
-- CSV financial transactions are currently processed synchronously for data consistency. Future optimization could explore controlled asynchronous processing where transaction dependencies allow.
+- CSV financial transactions are currently processed synchronously for data consistency. Future optimization could explore controlled asynchronous processing where transaction dependencies allow
+- Current CSV processing implementation has basic error handling without robust recovery strategies. AWS Step Functions could provide a more resilient processing pipeline with comprehensive failure management
